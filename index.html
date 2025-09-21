@@ -1,1643 +1,562 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BD Clean Jurain - User Registration</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BD Clean Jurain - Registration (Final)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --primary: #00695c;
-      --secondary: #4db6ac;
-      --success: #2e7d32;
-      --danger: #d32f2f;
-      --warning: #ff9800;
-      --info: #1976d2;
-      --dark: #333;
-      --light: #f8f9fa;
-      --gray: #6c757d;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', 'Nirmala UI', sans-serif;
-    }
+    :root{--primary:#00695c;--secondary:#4db6ac;--danger:#d32f2f;--success:#2e7d32;--muted:#6c757d}
+    *{box-sizing:border-box;font-family: "Noto Sans Bengali", "Segoe UI", sans-serif}
+    body{margin:0;background:linear-gradient(135deg,#e0f7fa 0%,#fff 100%);padding:16px;min-height:100vh}
+    header{background:var(--primary);color:#fff;padding:14px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,0.12)}
+    .header-left h1{font-size:18px;display:flex;align-items:center;gap:10px}
+    .header-right{display:flex;align-items:center;gap:12px;font-size:14px}
+    .btn-sm{padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
+    .login-btn{background:rgba(255,255,255,0.12);color:#fff}
+    .logout-btn{background:rgba(255,255,255,0.12);color:#fff;display:none}
 
-    body {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      min-height: 100vh;
-      padding: 20px;
-    }
+    .main{display:flex;gap:20px;align-items:flex-start;justify-content:center;margin-top:18px}
+    .container{width:100%;max-width:820px;background:#fff;padding:22px;border-radius:12px;box-shadow:0 15px 30px rgba(0,0,0,0.08);position:relative}
+    .container::before{content:'';position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-top-left-radius:12px;border-top-right-radius:12px}
+    h2{color:var(--primary);text-align:center;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px}
+    .header-info{display:flex;justify-content:center;gap:14px;color:#555;margin-bottom:14px;flex-wrap:wrap}
 
-    /* Header Styles */
-    header {
-      background: var(--primary);
-      color: #fff;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .header-left h1 {
-      margin: 0;
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-size: 14px;
-    }
+    .progress-bar{height:8px;background:#eee;border-radius:999px;margin-bottom:14px;overflow:hidden}
+    .progress{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .35s}
 
-    .login-btn {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.3s;
-    }
+    .form-page{display:none}
+    .form-page.active{display:block}
 
-    .login-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
+    .form-group{margin-bottom:14px}
+    label{display:block;margin-bottom:6px;font-weight:600;color:#444}
+    input[type=text],input[type=tel],input[type=email],input[type=url],select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;background:#fbfbfb;font-size:15px}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(0,105,92,0.06);background:#fff}
+    .error-text{color:var(--danger);font-size:13px;margin-top:6px;display:none}
+    .invalid input,.invalid select{border-color:var(--danger)}
 
-    .logout-btn {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.3s;
-      display: none;
-    }
+    .btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;cursor:pointer}
+    .btn.secondary{background:#f1f1f1;color:#333}
+    .btn-inline{width:auto;padding:10px 16px}
 
-    .logout-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
+    .photo-preview{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #eee;margin-bottom:12px;display:none}
+    .upload-btn{display:inline-block;padding:10px 16px;border-radius:6px;background:var(--primary);color:#fff;position:relative;cursor:pointer}
+    .upload-btn input{position:absolute;left:0;top:0;opacity:0;width:100%;height:100%;cursor:pointer}
 
-    /* Main Content Container */
-    .main-container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
+    .terms{background:#fafafa;border:1px solid #eee;padding:12px;border-radius:8px;font-size:14px;max-height:150px;overflow:auto}
 
-    /* Registration Form Styles */
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 550px;
-      animation: fadeIn 0.8s ease;
-      position: relative;
-      overflow: hidden;
-    }
+    .footer{text-align:center;color:#666;margin-top:12px}
 
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-    }
+    /* Admin panel */
+    .admin-panel{display:none;width:100%}
+    .dashboard-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0}
+    .stat-card{background:#fff;border-radius:8px;padding:12px;box-shadow:0 2px 5px rgba(0,0,0,0.05);text-align:center}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+    .search-box{position:relative;flex:1;min-width:220px}
+    .search-box input{padding:10px 14px 10px 38px}
+    .search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+    .filter-buttons{display:flex;gap:8px;flex-wrap:wrap}
+    .filter-btn{padding:8px 12px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+    .filter-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
+    .table-container{background:#fff;padding:12px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.08);overflow:auto}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border:1px solid #eee;text-align:center}
+    thead th{position:sticky;top:0;background:var(--primary);color:#fff}
 
-    .header-info {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 14px;
-      color: #555;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
+    .action-buttons{display:flex;gap:6px;justify-content:center}
+    .action-btn{padding:6px 8px;border-radius:6px;border:none;color:#fff;cursor:pointer}
 
-    .header-info p {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
+    /* modal */
+    .modal{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:1000}
+    .modal-content{background:#fff;padding:18px;border-radius:8px;width:520px;max-width:95%;max-height:90vh;overflow:auto}
 
-    .progress-bar {
-      height: 5px;
-      background: #e0e0e0;
-      border-radius: 5px;
-      margin-bottom: 25px;
-      overflow: hidden;
-    }
+    .toast{position:fixed;right:18px;bottom:18px;padding:12px 16px;border-radius:6px;color:#fff;display:flex;align-items:center;gap:10px;z-index:1100;transform:translateY(20px);opacity:0;transition:.3s}
+    .toast.show{opacity:1;transform:none}
+    .toast.success{background:var(--success)}.toast.error{background:var(--danger)}.toast.warning{background:var(--secondary)}
 
-    .progress {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-
-    .form-nav {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .form-page {
-      display: none;
-    }
-
-    .form-page.active {
-      display: block;
-      animation: slideIn 0.5s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #444;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 14px 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 15px;
-      transition: all 0.3s;
-      background: #f9f9f9;
-    }
-
-    .form-group input:focus, .form-group select:focus {
-      border-color: var(--primary);
-      background: #fff;
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(0,105,92,0.2);
-    }
-
-    .form-group .error {
-      color: var(--danger);
-      font-size: 13px;
-      margin-top: 5px;
-      display: none;
-    }
-
-    .form-group.invalid input {
-      border-color: var(--danger);
-    }
-
-    .form-group.invalid .error {
-      display: block;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn:hover {
-      background: linear-gradient(135deg, var(--secondary), var(--primary));
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn-secondary {
-      background: #f1f1f1;
-      color: #333;
-    }
-
-    .btn-secondary:hover {
-      background: #e5e5e5;
-    }
-
-    .btn-nav {
-      width: auto;
-      padding: 12px 20px;
-    }
-
-    .message {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 500;
-      display: none;
-    }
-
-    .success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    .photo-upload-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 15px 0;
-    }
-
-    .photo-preview {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #eee;
-      margin-bottom: 15px;
-      display: none;
-    }
-
-    .upload-btn {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      cursor: pointer;
-      background: var(--info);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      text-align: center;
-      transition: background 0.3s;
-    }
-
-    .upload-btn:hover {
-      background: #1565c0;
-    }
-
-    .upload-btn input {
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
-
-    .terms {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: #f9f9f9;
-      max-height: 150px;
-      overflow-y: auto;
-      font-size: 14px;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 25px;
-      color: #666;
-      font-size: 14px;
-    }
-
-    /* Admin Panel Styles (Hidden by Default) */
-    .admin-panel {
-      display: none;
-      width: 100%;
-    }
-
-    /* Dashboard Stats */
-    .dashboard-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin: 20px;
-    }
-    
-    .stat-card {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .stat-card i {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-    
-    .stat-card.total i { color: var(--primary); }
-    .stat-card.pending i { color: var(--warning); }
-    .stat-card.approved i { color: var(--success); }
-    .stat-card.rejected i { color: var(--danger); }
-    
-    .stat-card h3 {
-      font-size: 28px;
-      margin: 5px 0;
-    }
-    
-    .stat-card p {
-      color: var(--gray);
-      font-size: 14px;
-    }
-    
-    /* Filter and Search */
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin: 0 20px 20px;
-      align-items: center;
-    }
-    
-    .search-box {
-      position: relative;
-      flex: 1;
-      min-width: 250px;
-    }
-    
-    .search-box input {
-      width: 100%;
-      padding: 10px 15px 10px 40px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    
-    .search-box i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray);
-    }
-    
-    .filter-buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    
-    .filter-btn {
-      padding: 8px 15px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.2s;
-    }
-    
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    
-    /* Table Styles */
-    .table-container {
-      width: 95%;
-      max-width: 1400px;
-      margin: 0 auto 30px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      overflow-x: auto;
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    table th, table td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: center;
-    }
-    
-    table th {
-      background: var(--primary);
-      color: #fff;
-      position: sticky;
-      top: 0;
-    }
-    
-    table tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-    
-    /* Status Colors */
-    .status-pending { background: #fff3cd; color: #856404; }
-    .status-approved { background: #d4edda; color: #155724; }
-    .status-hold { background: #e2e3e5; color: #383d41; }
-    .status-rejected { background: #f8d7da; color: #721c24; }
-    .status-edited { background: #cce5ff; color: #004085; }
-    
-    /* Action Buttons */
-    .action-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-    
-    .action-btn {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: #fff;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    
-    .approve { background: var(--success); }
-    .approve:hover { background: #1b5e20; }
-    
-    .hold { background: var(--warning); }
-    .hold:hover { background: #f57c00; }
-    
-    .reject { background: var(--danger); }
-    .reject:hover { background: #c62828; }
-    
-    .edit { background: var(--info); }
-    .edit:hover { background: #1565c0; }
-    
-    .delete { background: var(--gray); }
-    .delete:hover { background: #495057; }
-    
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    
-    .modal-content {
-      background: #fff;
-      padding: 25px;
-      border-radius: 8px;
-      width: 450px;
-      max-width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: var(--gray);
-    }
-    
-    .form-group-modal {
-      margin-bottom: 15px;
-    }
-    
-    .form-group-modal label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-    
-    .form-group-modal input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    
-    .modal-actions button {
-      flex: 1;
-      padding: 10px;
-    }
-    
-    .btn-cancel {
-      background: var(--gray);
-    }
-    
-    .btn-save {
-      background: var(--success);
-    }
-    
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #333;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 4px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s;
-    }
-    
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    
-    .toast.success { background: var(--success); }
-    .toast.error { background: var(--danger); }
-    .toast.warning { background: var(--warning); }
-    
-    /* Login Modal */
-    .login-modal {
-      display: none;
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    
-    .login-content {
-      background: #fff;
-      padding: 25px;
-      border-radius: 8px;
-      width: 400px;
-      max-width: 90%;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      .header-right {
-        align-items: flex-start;
-      }
-      
-      .dashboard-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      table th, table td {
-        padding: 8px 5px;
-        font-size: 14px;
-      }
-      
-      .action-buttons {
-        flex-direction: column;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .dashboard-stats {
-        grid-template-columns: 1fr;
-      }
-      
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      
-      .filter-buttons {
-        justify-content: center;
-      }
-    }
+    @media(max-width:900px){header{flex-direction:column;align-items:flex-start} .container{padding:16px}}
   </style>
 </head>
 <body>
   <header>
-    <div class="header-left">
-      <h1><i class="fas fa-broom"></i> BD Clean Jurain</h1>
-    </div>
+    <div class="header-left"><h1><i class="fas fa-broom"></i> BD Clean Jurain</h1></div>
     <div class="header-right">
-      <p id="dateTime"></p>
-      <p id="ipAddress"></p>
-      <button class="login-btn" id="loginButton" onclick="openLoginModal()">
-        <i class="fas fa-sign-in-alt"></i> Login
-      </button>
-      <button class="logout-btn" id="logoutButton" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </button>
+      <div id="dateTime" aria-live="polite"></div>
+      <div id="ipAddress" aria-live="polite"></div>
+      <button id="loginButton" class="btn-sm login-btn" onclick="openLoginModal()"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button id="logoutButton" class="btn-sm logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
     </div>
   </header>
 
-  <div class="main-container">
-    <!-- User Registration Form -->
-    <div class="container" id="registrationForm">
-      <h2><i class="fas fa-broom"></i> BD Clean Jurain</h2>
+  <main class="main">
+    <!-- Registration container -->
+    <section class="container" id="registrationForm" aria-labelledby="formTitle">
+      <h2 id="formTitle"><i class="fas fa-broom"></i> সদস্য নিবন্ধন</h2>
+
       <div class="header-info">
-        <p id="date"><i class="fas fa-calendar-alt"></i> <span></span></p>
-        <p id="time"><i class="fas fa-clock"></i> <span></span></p>
-        <p id="ip"><i class="fas fa-globe"></i> <span></span></p>
+        <div id="date"><i class="fas fa-calendar-alt"></i> <span></span></div>
+        <div id="time"><i class="fas fa-clock"></i> <span></span></div>
+        <div id="ip"><i class="fas fa-globe"></i> <span></span></div>
       </div>
 
-      <div class="progress-bar">
-        <div class="progress" id="formProgress"></div>
-      </div>
+      <div class="progress-bar" aria-hidden="true"><div id="formProgress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div></div>
 
-      <form id="userForm">
-        <!-- Page 1: Personal Information -->
-        <div class="form-page active" id="page1">
-          <div class="form-group">
-            <label for="name"><i class="fas fa-user"></i> পূর্ণ নাম:</label>
-            <input type="text" id="name" placeholder="আপনার পূর্ণ নাম লিখুন" required>
-            <div class="error">দয়া করে আপনার নাম লিখুন</div>
+      <form id="userForm" novalidate>
+        <!-- Page 1 -->
+        <div id="page1" class="form-page active">
+          <div class="form-group" id="group-name">
+            <label for="name">পূর্ণ নাম</label>
+            <input id="name" type="text" placeholder="আপনার পূর্ণ নাম লিখুন" required aria-required="true">
+            <div class="error-text">দয়া করে আপনার নাম লিখুন</div>
           </div>
-          
-          <div class="form-group">
-            <label for="phone"><i class="fas fa-phone"></i> ফোন নম্বর:</label>
-            <input type="tel" id="phone" placeholder="01XXXXXXXXX" required>
-            <div class="error">সঠিক ফোন নম্বর লিখুন</div>
+
+          <div class="form-group" id="group-phone">
+            <label for="phone">ফোন নম্বর</label>
+            <input id="phone" type="tel" placeholder="01XXXXXXXXX" required aria-required="true">
+            <div class="error-text">সঠিক ফোন নম্বর লিখুন (বাংলাদেশ)</div>
           </div>
-          
-          <div class="form-group">
-            <label for="email"><i class="fas fa-envelope"></i> ইমেইল:</label>
-            <input type="email" id="email" placeholder="example@gmail.com" required>
-            <div class="error">সঠিক ইমেইল ঠিকানা লিখুন</div>
+
+          <div class="form-group" id="group-email">
+            <label for="email">ইমেইল</label>
+            <input id="email" type="email" placeholder="example@gmail.com">
+            <div class="error-text">সঠিক ইমেইল লিখুন</div>
           </div>
-          
-          <button type="button" class="btn btn-nav" onclick="nextPage(1, 2)">
-            পরবর্তী <i class="fas fa-arrow-right"></i>
-          </button>
+
+          <button type="button" class="btn btn-inline" onclick="nextPage(1,2)">পরবর্তী <i class="fas fa-arrow-right"></i></button>
         </div>
 
-        <!-- Page 2: Address Information -->
-        <div class="form-page" id="page2">
-          <div class="form-group">
-            <label for="area"><i class="fas fa-map-marker-alt"></i> এলাকার নাম:</label>
-            <input type="text" id="area" placeholder="আপনার এলাকার নাম লিখুন" required>
-            <div class="error">দয়া করে এলাকার নাম লিখুন</div>
+        <!-- Page 2 -->
+        <div id="page2" class="form-page">
+          <div class="form-group" id="group-area">
+            <label for="area">এলাকার নাম</label>
+            <input id="area" type="text" placeholder="আপনার এলাকার নাম লিখুন" required>
+            <div class="error-text">দয়া করে এলাকার নাম লিখুন</div>
           </div>
-          
-          <div class="form-group">
-            <label for="word"><i class="fas fa-home"></i> ওয়ার্ড নম্বর:</label>
-            <input type="text" id="word" placeholder="ওয়ার্ড নম্বর লিখুন" required>
-            <div class="error">দয়া করে ওয়ার্ড নম্বর লিখুন</div>
+
+          <div class="form-group" id="group-word">
+            <label for="word">ওয়ার্ড নম্বর</label>
+            <input id="word" type="text" placeholder="ওয়ার্ড নম্বর লিখুন" required>
+            <div class="error-text">ওয়ার্ড নম্বর লিখুন</div>
           </div>
-          
-          <div class="form-nav">
-            <button type="button" class="btn btn-secondary btn-nav" onclick="nextPage(2, 1)">
-              <i class="fas fa-arrow-left"></i> পূর্ববর্তী
-            </button>
-            <button type="button" class="btn btn-nav" onclick="nextPage(2, 3)">
-              পরবর্তী <i class="fas fa-arrow-right"></i>
-            </button>
+
+          <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
+            <button type="button" class="btn secondary btn-inline" onclick="nextPage(2,1)"><i class="fas fa-arrow-left"></i> পূর্ববর্তী</button>
+            <button type="button" class="btn btn-inline" onclick="nextPage(2,3)">পরবর্তী <i class="fas fa-arrow-right"></i></button>
           </div>
         </div>
 
-        <!-- Page 3: Photo & Social -->
-        <div class="form-page" id="page3">
-          <div class="photo-upload-container">
-            <img id="photoPreview" class="photo-preview" alt="Photo Preview">
-            <label class="upload-btn">
-              <i class="fas fa-camera"></i> ফটো আপলোড করুন
-              <input type="file" id="photo" accept="image/*" required>
+        <!-- Page 3 -->
+        <div id="page3" class="form-page">
+          <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:12px">
+            <img id="photoPreview" class="photo-preview" alt="আপলোডকৃত ছবি">
+            <label class="upload-btn"> <i class="fas fa-camera"></i> ফটো আপলোড
+              <input id="photo" type="file" accept="image/*">
             </label>
-            <div class="error" id="photoError">দয়া করে একটি ফটো আপলোড করুন</div>
+            <div class="error-text" id="photoError">দয়া করে একটি ফটো আপলোড করুন (অপশনাল)</div>
           </div>
-          
-          <div class="form-group">
-            <label for="facebook"><i class="fab fa-facebook"></i> ফেসবুক প্রোফাইল লিঙ্ক (ঐচ্ছিক):</label>
-            <input type="url" id="facebook" placeholder="https://facebook.com/username">
-            <div class="error">সঠিক ফেসবুক লিঙ্ক লিখুন</div>
+
+          <div class="form-group" id="group-facebook">
+            <label for="facebook">ফেসবুক প্রোফাইল লিঙ্ক (আবশ্যক)</label>
+            <input id="facebook" type="url" placeholder="https://facebook.com/username" required>
+            <div class="error-text">সঠিক Facebook URL লিখুন (অনুপস্থিত নয়)</div>
           </div>
-          
-          <div class="terms">
-            <h4><i class="fas fa-info-circle"></i> নিয়ম ও শর্তাবলী:</h4>
+
+          <div class="terms" aria-label="Terms and conditions">
+            <h4><i class="fas fa-info-circle"></i> নিয়ম ও শর্তাবলী</h4>
             <p>১. আবেদনকারীকে অবশ্যই বাংলাদেশের নাগরিক হতে হবে।</p>
-            <p>২. প্রদত্ত সকল তথ্য সঠিক ও নির্ভুল হতে হবে。</p>
+            <p>২. প্রদত্ত সকল তথ্য সঠিক ও নির্ভুল হতে হবে।</p>
             <p>৩. ভুল তথ্য প্রদানের দায়ভার আবেদনকারীর নিজের।</p>
             <p>৪. আবেদন গ্রহণ বা বাতিল করার সম্পূর্ণ অধিকার BD Clean Jurain কর্তৃপক্ষের কাছে সংরক্ষিত।</p>
           </div>
-          
-          <div class="form-nav">
-            <button type="button" class="btn btn-secondary btn-nav" onclick="nextPage(3, 2)">
-              <i class="fas fa-arrow-left"></i> পূর্ববর্তী
-            </button>
-            <button type="button" class="btn btn-nav" onclick="validateForm()">
-              <i class="fas fa-paper-plane"></i> জমা দিন
-            </button>
+
+          <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:12px">
+            <button type="button" class="btn secondary btn-inline" onclick="nextPage(3,2)"><i class="fas fa-arrow-left"></i> পূর্ববর্তী</button>
+            <button type="button" class="btn btn-inline" onclick="validateForm()"><i class="fas fa-paper-plane"></i> জমা দিন</button>
           </div>
         </div>
       </form>
 
-      <div id="successMessage" class="message success">
-        <i class="fas fa-check-circle"></i> আপনার আবেদন সফলভাবে জমা হয়েছে!
-      </div>
-      
-      <div id="errorMessage" class="message error">
-        <i class="fas fa-exclamation-circle"></i> <span id="errorText">একটি ত্রুটি হয়েছে। আবার চেষ্টা করুন。</span>
-      </div>
+      <div id="successMessage" class="message success" style="display:none;margin-top:12px;padding:12px;border-radius:8px;background:#d4edda;color:#155724">✅ আপনার আবেদন সফলভাবে জমা হয়েছে!</div>
+      <div id="errorMessage" class="message error" style="display:none;margin-top:12px;padding:12px;border-radius:8px;background:#f8d7da;color:#721c24"></div>
 
-      <div class="footer">
-        <p>BD Clean Jurain &copy; 2023 | সকল অধিকার সংরক্ষিত</p>
-      </div>
-    </div>
+      <div class="footer">BD Clean Jurain &copy; <span id="year"></span> | সকল অধিকার সংরক্ষিত</div>
+    </section>
 
-    <!-- Admin Panel (Hidden by Default) -->
-    <div class="admin-panel" id="adminPanel">
-      <!-- Dashboard Stats -->
+    <!-- Admin panel -->
+    <aside class="admin-panel" id="adminPanel">
       <div class="dashboard-stats">
-        <div class="stat-card total">
-          <i class="fas fa-users"></i>
-          <h3 id="totalUsers">0</h3>
-          <p>Total Users</p>
-        </div>
-        <div class="stat-card pending">
-          <i class="fas fa-clock"></i>
-          <h3 id="pendingUsers">0</h3>
-          <p>Pending</p>
-        </div>
-        <div class="stat-card approved">
-          <i class="fas fa-check-circle"></i>
-          <h3 id="approvedUsers">0</h3>
-          <p>Approved</p>
-        </div>
-        <div class="stat-card rejected">
-          <i class="fas fa-times-circle"></i>
-          <h3 id="rejectedUsers">0</h3>
-          <p>Rejected</p>
-        </div>
+        <div class="stat-card"><i class="fas fa-users"></i><h3 id="totalUsers">0</h3><p>মোট সদস্য</p></div>
+        <div class="stat-card"><i class="fas fa-clock"></i><h3 id="pendingUsers">0</h3><p>Pending</p></div>
+        <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="approvedUsers">0</h3><p>Approved</p></div>
+        <div class="stat-card"><i class="fas fa-times-circle"></i><h3 id="rejectedUsers">0</h3><p>Rejected</p></div>
       </div>
 
-      <!-- Filter and Search Controls -->
       <div class="controls">
-        <div class="search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchInput" placeholder="Search users...">
-        </div>
+        <div class="search-box"><i class="fas fa-search"></i><input id="searchInput" placeholder="Search users..."></div>
         <div class="filter-buttons">
-          <button class="filter-btn active" data-filter="all">
-            <i class="fas fa-layer-group"></i> All
-          </button>
-          <button class="filter-btn" data-filter="pending">
-            <i class="fas fa-clock"></i> Pending
-          </button>
-          <button class="filter-btn" data-filter="approved">
-            <i class="fas fa-check-circle"></i> Approved
-          </button>
-          <button class="filter-btn" data-filter="rejected">
-            <i class="fas fa-times-circle"></i> Rejected
-          </button>
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="pending">Pending</button>
+          <button class="filter-btn" data-filter="approved">Approved</button>
+          <button class="filter-btn" data-filter="rejected">Rejected</button>
         </div>
       </div>
 
-      <!-- Main Content -->
-      <div class="table-container">
-        <table id="userTable">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Area</th>
-              <th>Word</th>
-              <th>Photo</th>
-              <th>Status</th>
-              <th>Registration Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+      <div class="table-container"><table id="userTable"><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Area</th><th>Word</th><th>Photo</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+    </aside>
+  </main>
 
   <!-- Edit Modal -->
-  <div id="editModal" class="modal">
+  <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3>Edit User</h3>
-        <button class="close-btn" onclick="closeModal()">&times;</button>
-      </div>
-      <div class="form-group-modal">
-        <label for="editName">Name</label>
-        <input type="text" id="editName" placeholder="Name">
-      </div>
-      <div class="form-group-modal">
-        <label for="editPhone">Phone</label>
-        <input type="text" id="editPhone" placeholder="Phone">
-      </div>
-      <div class="form-group-modal">
-        <label for="editGmail">Email</label>
-        <input type="text" id="editGmail" placeholder="Email">
-      </div>
-      <div class="form-group-modal">
-        <label for="editArea">Area</label>
-        <input type="text" id="editArea" placeholder="Area">
-      </div>
-      <div class="form-group-modal">
-        <label for="editWord">Word Number</label>
-        <input type="text" id="editWord" placeholder="Word Number">
-      </div>
-      <div class="form-group-modal">
-        <label for="editPhoto">Photo URL</label>
-        <input type="text" id="editPhoto" placeholder="Photo URL">
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-save" onclick="saveEdit()">Save Changes</button>
-      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3>Edit User</h3><button class="close-btn" onclick="closeModal()">&times;</button></div>
+      <div class="form-group"><label for="editName">Name</label><input id="editName" type="text"></div>
+      <div class="form-group"><label for="editPhone">Phone</label><input id="editPhone" type="text"></div>
+      <div class="form-group"><label for="editGmail">Email</label><input id="editGmail" type="text"></div>
+      <div class="form-group"><label for="editArea">Area</label><input id="editArea" type="text"></div>
+      <div class="form-group"><label for="editWord">Word</label><input id="editWord" type="text"></div>
+      <div class="form-group"><label for="editPhoto">Photo URL</label><input id="editPhoto" type="text"></div>
+      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn secondary btn-inline" onclick="closeModal()">Cancel</button><button class="btn btn-inline" onclick="saveEdit()">Save</button></div>
     </div>
   </div>
 
   <!-- Login Modal -->
-  <div id="loginModal" class="login-modal">
-    <div class="login-content">
-      <div class="modal-header">
-        <h3>Admin Login</h3>
-        <button class="close-btn" onclick="closeLoginModal()">&times;</button>
-      </div>
-      <div class="form-group-modal">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter username">
-      </div>
-      <div class="form-group-modal">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password">
-      </div>
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeLoginModal()">Cancel</button>
-        <button class="btn-save" onclick="login()">Login</button>
-      </div>
+  <div id="loginModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3>Admin Login</h3><button class="close-btn" onclick="closeLoginModal()">&times;</button></div>
+      <div class="form-group"><label for="username">Username</label><input id="username" type="text"></div>
+      <div class="form-group"><label for="password">Password</label><input id="password" type="password"></div>
+      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn secondary btn-inline" onclick="closeLoginModal()">Cancel</button><button class="btn btn-inline" onclick="login()">Login</button></div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast">
-    <i id="toast-icon"></i>
-    <span id="toast-message"></span>
-  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"><i id="toast-icon"></i><span id="toast-message"></span></div>
 
   <script>
-    // Default admin credentials (you should change these in production)
-    const ADMIN_CREDENTIALS = {
-      username: "admin",
-      password: "admin123"
-    };
+    // ---------- IMPORTANT: Move sensitive tokens to server in production ----------
+    const ADMIN_CREDENTIALS = {username: 'jurain', password: 'jurain123'}; // change if needed
 
-    // Telegram Configuration - REPLACE WITH YOUR OWN BOT TOKEN AND CHAT IDs
+    // Put your bot token & chat IDs here (for dev/testing). Production: proxy these on server.
     const TELEGRAM_CONFIG = {
-      BOT_TOKEN: "7757315317:AAHhlhX7UwuOnqSGE7C3PihIJCN-d_Gpbc4", // Replace with your bot token
-      REGISTRATION_CHAT_ID: "-4940703054", // Replace with your registration group chat ID
-      ADMIN_CHAT_ID: "-4970599148"      // Replace with your admin actions group chat ID
+      BOT_TOKEN: '7757315317:AAHhlhX7UwuOnqSGE7C3PihIJCN-d_Gpbc4', // <-- paste your BOT token here for quick test (NOT recommended for production)
+      REGISTRATION_CHAT_ID: '-1002376799447', // <-- registration messages go here
+      ADMIN_CHAT_ID: '-1002376799447' // <-- admin notifications (optional)
     };
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    let editIndex = null;
-    let currentFilter = "all";
-    let searchQuery = "";
-    let isLoggedIn = false;
+    const nowYear = new Date().getFullYear(); document.getElementById('year').textContent = nowYear;
 
-    // Initialize the application
-    function init() {
-      updateDateTime();
-      setInterval(updateDateTime, 1000);
-      
-      fetchIPAddress();
-      updateStats();
-      setupEventListeners();
-      
-      // Check if user is already logged in
-      const savedLoginState = localStorage.getItem("isLoggedIn");
-      if (savedLoginState === "true") {
-        showAdminPanel();
-      }
-      
-      // Setup photo preview
-      document.getElementById("photo").addEventListener("change", function(e) {
-        const file = e.target.files[0];
-        const preview = document.getElementById("photoPreview");
-        const error = document.getElementById("photoError");
-        
-        if (file) {
-          // Validate file type
-          if (!file.type.startsWith('image/')) {
-            error.textContent = 'শুধুমাত্র ইমেজ ফাইল অনুমোদিত';
-            error.style.display = 'block';
-            this.value = '';
-            preview.style.display = 'none';
-            return;
-          }
-          
-          // Validate file size (max 2MB)
-          if (file.size > 2 * 1024 * 1024) {
-            error.textContent = 'ফাইলের আকার 2MB এর কম হতে হবে';
-            error.style.display = 'block';
-            this.value = '';
-            preview.style.display = 'none';
-            return;
-          }
-          
-          error.style.display = 'none';
-          const reader = new FileReader();
-          reader.onload = function(event) {
-            preview.src = event.target.result;
-            preview.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        } else {
-          preview.style.display = 'none';
-        }
-      });
+    // App state
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let editUserId = null; let currentFilter = 'all'; let searchQuery = '';
+    let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    function init(){
+      updateDateTime(); setInterval(updateDateTime,1000);
+      fetchIPAddress(); setupEventListeners(); renderBasedOnLogin(); updateStats();
+      document.getElementById('photo').addEventListener('change',handlePhotoChange);
     }
 
-    // Update date and time
-    function updateDateTime() {
+    function updateDateTime(){
       const now = new Date();
-      document.getElementById("dateTime").innerHTML = 
-        `<i class="fas fa-calendar-alt"></i> ${now.toLocaleDateString()} <i class="fas fa-clock"></i> ${now.toLocaleTimeString()}`;
-      
-      // Update registration form date/time as well
+      document.getElementById('dateTime').innerHTML = `<i class="fas fa-calendar-alt"></i> ${now.toLocaleDateString()} <i class="fas fa-clock"></i> ${now.toLocaleTimeString()}`;
       document.querySelector('#date span').textContent = now.toLocaleDateString('bn-BD');
       document.querySelector('#time span').textContent = now.toLocaleTimeString('bn-BD');
     }
 
-    // Fetch IP address
-    function fetchIPAddress() {
-      fetch("https://api.ipify.org?format=json")
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("ipAddress").innerHTML = `<i class="fas fa-globe"></i> IP: ${data.ip}`;
-          document.querySelector('#ip span').textContent = data.ip;
-        })
-        .catch(() => {
-          document.getElementById("ipAddress").innerHTML = `<i class="fas fa-globe"></i> IP: Unable to fetch`;
-          document.querySelector('#ip span').textContent = "IP অজানা";
-        });
+    function fetchIPAddress(){
+      fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>{
+        document.getElementById('ipAddress').innerHTML = `<i class="fas fa-globe"></i> IP: ${d.ip}`;
+        document.querySelector('#ip span').textContent = d.ip;
+      }).catch(()=>{document.getElementById('ipAddress').textContent='IP: Unable to fetch';document.querySelector('#ip span').textContent='IP অজানা'})
     }
 
-    // Set up event listeners
-    function setupEventListeners() {
-      // Search functionality
-      const searchInput = document.getElementById("searchInput");
-      if (searchInput) {
-        searchInput.addEventListener("input", function(e) {
-          searchQuery = e.target.value.toLowerCase();
-          renderTable();
-        });
-      }
+    function setupEventListeners(){
+      document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');currentFilter=this.dataset.filter;renderTable();}));
+      const s = document.getElementById('searchInput'); if(s){s.addEventListener('input',e=>{searchQuery=e.target.value.trim().toLowerCase();renderTable();})}
+    }
 
-      // Filter functionality
-      document.querySelectorAll(".filter-btn").forEach(button => {
-        button.addEventListener("click", function() {
-          document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-          this.classList.add("active");
-          currentFilter = this.dataset.filter;
-          renderTable();
-        });
+    function openLoginModal(){document.getElementById('loginModal').style.display='flex';document.getElementById('loginModal').setAttribute('aria-hidden','false')}
+    function closeLoginModal(){document.getElementById('loginModal').style.display='none';document.getElementById('loginModal').setAttribute('aria-hidden','true');document.getElementById('username').value='';document.getElementById('password').value=''}
+    function login(){const u=document.getElementById('username').value.trim();const p=document.getElementById('password').value; if(u===ADMIN_CREDENTIALS.username && p===ADMIN_CREDENTIALS.password){isLoggedIn=true;localStorage.setItem('isLoggedIn','true');renderBasedOnLogin();closeLoginModal();showToast('Login successful','success')}else{showToast('Invalid username or password','error')}}
+    function logout(){isLoggedIn=false;localStorage.setItem('isLoggedIn','false');renderBasedOnLogin();showToast('Logged out','success')}
+
+    function renderBasedOnLogin(){if(isLoggedIn){document.getElementById('registrationForm').style.display='none';document.getElementById('adminPanel').style.display='block';document.getElementById('loginButton').style.display='none';document.getElementById('logoutButton').style.display='inline-flex';renderTable();updateStats()}else{document.getElementById('registrationForm').style.display='block';document.getElementById('adminPanel').style.display='none';document.getElementById('loginButton').style.display='inline-flex';document.getElementById('logoutButton').style.display='none'}}
+
+    function findUserIndexById(id){return users.findIndex(u=>u.id===id)}
+
+    function renderTable(){
+      const tbody = document.querySelector('#userTable tbody'); if(!tbody) return; tbody.innerHTML='';
+      const filtered = users.filter(u=>{
+        const matchesFilter = currentFilter==='all' || (u.status && u.status.toLowerCase()===currentFilter);
+        const q = searchQuery;
+        if(!q) return matchesFilter;
+        return (u.name||'').toLowerCase().includes(q) || (u.phone||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q) || (u.area||'').toLowerCase().includes(q) || (u.word||'').toLowerCase().includes(q);
       });
-    }
-
-    // Open login modal
-    function openLoginModal() {
-      document.getElementById("loginModal").style.display = "flex";
-    }
-
-    // Close login modal
-    function closeLoginModal() {
-      document.getElementById("loginModal").style.display = "none";
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
-    }
-
-    // Login function
-    function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      
-      if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        isLoggedIn = true;
-        localStorage.setItem("isLoggedIn", "true");
-        showAdminPanel();
-        closeLoginModal();
-        showToast("Login successful", "success");
-      } else {
-        showToast("Invalid username or password", "error");
-      }
-    }
-
-    // Logout function
-    function logout() {
-      isLoggedIn = false;
-        localStorage.setItem("isLoggedIn", "false");
-        hideAdminPanel();
-        showToast("Logged out successfully", "success");
-    }
-
-    // Show admin panel
-    function showAdminPanel() {
-      document.getElementById("registrationForm").style.display = "none";
-      document.getElementById("adminPanel").style.display = "block";
-      document.getElementById("loginButton").style.display = "none";
-      document.getElementById("logoutButton").style.display = "flex";
-      renderTable();
-      updateStats();
-    }
-
-    // Hide admin panel
-    function hideAdminPanel() {
-      document.getElementById("registrationForm").style.display = "block";
-      document.getElementById("adminPanel").style.display = "none";
-      document.getElementById("loginButton").style.display = "flex";
-      document.getElementById("logoutButton").style.display = "none";
-    }
-
-    // Render the user table
-    function renderTable() {
-      const tbody = document.querySelector("#userTable tbody");
-      if (!tbody) return;
-      
-      tbody.innerHTML = "";
-      
-      // Filter and search users
-      const filteredUsers = users.filter(user => {
-        const matchesFilter = currentFilter === "all" || user.status.toLowerCase() === currentFilter;
-        const matchesSearch = 
-          user.name.toLowerCase().includes(searchQuery) ||
-          user.phone.toLowerCase().includes(searchQuery) ||
-          user.email.toLowerCase().includes(searchQuery) ||
-          user.area.toLowerCase().includes(searchQuery) ||
-          user.word.toLowerCase().includes(searchQuery);
-        
-        return matchesFilter && matchesSearch;
-      });
-
-      if (filteredUsers.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center;">No users found</td></tr>`;
-        return;
-      }
-
-      filteredUsers.forEach((user, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.name}</td>
-          <td>${user.phone}</td>
-          <td>${user.email}</td>
-          <td>${user.area}</td>
-          <td>${user.word}</td>
-          <td><img src="${user.photo || 'https://via.placeholder.com/50'}" alt="User Photo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
-          <td class="status-${user.status.toLowerCase()}">${user.status}</td>
-          <td>${user.date}</td>
-          <td class="action-buttons">
-            <button class="action-btn approve" onclick="updateStatus(${index}, 'approved')"><i class="fas fa-check"></i></button>
-            <button class="action-btn hold" onclick="updateStatus(${index}, 'hold')"><i class="fas fa-pause"></i></button>
-            <button class="action-btn reject" onclick="updateStatus(${index}, 'rejected')"><i class="fas fa-times"></i></button>
-            <button class="action-btn edit" onclick="openEditModal(${index})"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete" onclick="deleteUser(${index})"><i class="fas fa-trash"></i></button>
-          </td>
-        `;
+      if(filtered.length===0){tbody.innerHTML='<tr><td colspan="10">No users found</td></tr>';return}
+      filtered.forEach(u=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${u.id}</td>
+                        <td>${escapeHtml(u.name)}</td>
+                        <td>${escapeHtml(u.phone)}</td>
+                        <td>${escapeHtml(u.email||'—')}</td>
+                        <td>${escapeHtml(u.area)}</td>
+                        <td>${escapeHtml(u.word)}</td>
+                        <td><img src="${u.photo||'https://via.placeholder.com/50'}" alt="photo" style="width:50px;height:50px;object-fit:cover;border-radius:4px"></td>
+                        <td class="status-${(u.status||'').toLowerCase()}">${escapeHtml(u.status||'pending')}</td>
+                        <td>${escapeHtml(u.date)}</td>
+                        <td class="action-buttons">
+                          <button class="action-btn" title="Approve" style="background:${'#2e7d32'}" onclick="updateStatusById(${u.id},'approved')"><i class="fas fa-check"></i></button>
+                          <button class="action-btn" title="Hold" style="background:${'#ff9800'}" onclick="updateStatusById(${u.id},'hold')"><i class="fas fa-pause"></i></button>
+                          <button class="action-btn" title="Reject" style="background:${'#d32f2f'}" onclick="updateStatusById(${u.id},'rejected')"><i class="fas fa-times"></i></button>
+                          <button class="action-btn" title="Edit" style="background:${'#1976d2'}" onclick="openEditModalById(${u.id})"><i class="fas fa-edit"></i></button>
+                          <button class="action-btn" title="Delete" style="background:${'#6c757d'}" onclick="deleteUserById(${u.id})"><i class="fas fa-trash"></i></button>
+                        </td>`;
         tbody.appendChild(tr);
       });
     }
 
-    // Update user status
-    function updateStatus(index, status) {
-      const user = users[index];
-      const previousStatus = user.status;
-      user.status = status;
-      localStorage.setItem("users", JSON.stringify(users));
-      renderTable();
-      updateStats();
-      
-      // Send Telegram notification for status change to ADMIN group
-      const message = `
-🔔 *BD Clean Jurain - User Status Update*
-
-👤 *Name:* ${user.name}
-📞 *Phone:* ${user.phone}
-📧 *Email:* ${user.email}
-📍 *Area:* ${user.area}
-🏠 *Word No:* ${user.word}
-
-🔄 *Status Changed:* ${previousStatus} → ${status.toUpperCase()}
-📅 *Date:* ${new Date().toLocaleDateString()}
-⏰ *Time:* ${new Date().toLocaleTimeString()}
-      `;
-      
+    function updateStatusById(id,status){
+      const idx=findUserIndexById(id);
+      if(idx===-1){showToast('User not found','error');return}
+      const user=users[idx]; const prev=user.status||'pending';
+      user.status=status; localStorage.setItem('users',JSON.stringify(users)); renderTable(); updateStats();
+      const message = `*BD Clean Jurain - Status Update*\nName: ${user.name}\nPhone: ${user.phone}\nStatus: ${prev} -> ${status}`;
       sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
-      showToast(`User status updated to ${status}`, "success");
+      showToast('User status updated','success');
     }
 
-    // Open edit modal
-    function openEditModal(index) {
-      const user = users[index];
-      document.getElementById("editName").value = user.name;
-      document.getElementById("editPhone").value = user.phone;
-      document.getElementById("editGmail").value = user.email;
-      document.getElementById("editArea").value = user.area;
-      document.getElementById("editWord").value = user.word;
-      document.getElementById("editPhoto").value = user.photo || "";
-      editIndex = index;
-      document.getElementById("editModal").style.display = "flex";
+    function openEditModalById(id){
+      const idx=findUserIndexById(id); if(idx===-1) return;
+      const u=users[idx];
+      document.getElementById('editName').value=u.name;document.getElementById('editPhone').value=u.phone;document.getElementById('editGmail').value=u.email;document.getElementById('editArea').value=u.area;document.getElementById('editWord').value=u.word;document.getElementById('editPhoto').value=u.photo||'';
+      editUserId=id; document.getElementById('editModal').style.display='flex'; document.getElementById('editModal').setAttribute('aria-hidden','false');
     }
+    function closeModal(){document.getElementById('editModal').style.display='none';document.getElementById('editModal').setAttribute('aria-hidden','true'); editUserId=null}
 
-    // Close modal
-    function closeModal() {
-      document.getElementById("editModal").style.display = "none";
-      editIndex = null;
-    }
-
-    // Save edit changes
-    function saveEdit() {
-      if (editIndex === null) return;
-      
-      const user = users[editIndex];
-      const originalUser = {...user};
-      
-      user.name = document.getElementById("editName").value;
-      user.phone = document.getElementById("editPhone").value;
-      user.email = document.getElementById("editGmail").value;
-      user.area = document.getElementById("editArea").value;
-      user.word = document.getElementById("editWord").value;
-      user.photo = document.getElementById("editPhoto").value;
-      user.status = "edited";
-      
-      localStorage.setItem("users", JSON.stringify(users));
-      renderTable();
-      updateStats();
-      closeModal();
-      
-      // Send Telegram notification for edit to ADMIN group
-      const message = `
-✏️ *BD Clean Jurain - User Edited*
-
-👤 *Name:* ${originalUser.name} → ${user.name}
-📞 *Phone:* ${originalUser.phone} → ${user.phone}
-📧 *Email:* ${originalUser.email} → ${user.email}
-📍 *Area:* ${originalUser.area} → ${user.area}
-🏠 *Word No:* ${originalUser.word} → ${user.word}
-
-📅 *Date:* ${new Date().toLocaleDateString()}
-⏰ *Time:* ${new Date().toLocaleTimeString()}
-      `;
-      
+    function saveEdit(){
+      if(editUserId===null) return; const idx=findUserIndexById(editUserId); if(idx===-1) return;
+      const original = {...users[idx]};
+      users[idx].name=document.getElementById('editName').value.trim();
+      users[idx].phone=document.getElementById('editPhone').value.trim();
+      users[idx].email=document.getElementById('editGmail').value.trim();
+      users[idx].area=document.getElementById('editArea').value.trim();
+      users[idx].word=document.getElementById('editWord').value.trim();
+      users[idx].photo=document.getElementById('editPhoto').value.trim();
+      users[idx].status='edited';
+      localStorage.setItem('users',JSON.stringify(users)); renderTable(); updateStats(); closeModal();
+      const message = `*BD Clean Jurain - Edited*\nName: ${original.name} -> ${users[idx].name}`;
       sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
-      showToast("User information updated", "success");
+      showToast('User updated','success');
     }
 
-    // Delete user
-    function deleteUser(index) {
-      if (confirm("Are you sure you want to delete this user?")) {
-        const deletedUser = users[index];
-        users.splice(index, 1);
-        localStorage.setItem("users", JSON.stringify(users));
-        renderTable();
-        updateStats();
-        
-        // Send Telegram notification for deletion to ADMIN group
-        const message = `
-🗑️ *BD Clean Jurain - User Deleted*
-
-👤 *Name:* ${deletedUser.name}
-📞 *Phone:* ${deletedUser.phone}
-📧 *Email:* ${deletedUser.email}
-📍 *Area:* ${deletedUser.area}
-🏠 *Word No:* ${deletedUser.word}
-
-📅 *Date:* ${new Date().toLocaleDateString()}
-⏰ *Time:* ${new Date().toLocaleTimeString()}
-        `;
-        
-        sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
-        showToast("User deleted successfully", "success");
-      }
+    function deleteUserById(id){
+      if(!confirm('Are you sure to delete?')) return;
+      const idx=findUserIndexById(id); if(idx===-1) return;
+      const removed = users.splice(idx,1)[0]; localStorage.setItem('users',JSON.stringify(users)); renderTable(); updateStats();
+      const message = `*BD Clean Jurain - Deleted*\nName: ${removed.name}`;
+      sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
+      showToast('Deleted','success');
     }
 
-    // Update dashboard statistics
-    function updateStats() {
-      const total = users.length;
-      const pending = users.filter(user => user.status.toLowerCase() === "pending").length;
-      const approved = users.filter(user => user.status.toLowerCase() === "approved").length;
-      const rejected = users.filter(user => user.status.toLowerCase() === "rejected").length;
-      
-      document.getElementById("totalUsers").textContent = total;
-      document.getElementById("pendingUsers").textContent = pending;
-      document.getElementById("approvedUsers").textContent = approved;
-      document.getElementById("rejectedUsers").textContent = rejected;
+    function updateStats(){
+      document.getElementById('totalUsers').textContent = users.length;
+      document.getElementById('pendingUsers').textContent = users.filter(u=> (u.status||'').toLowerCase()==='pending').length;
+      document.getElementById('approvedUsers').textContent = users.filter(u=> (u.status||'').toLowerCase()==='approved').length;
+      document.getElementById('rejectedUsers').textContent = users.filter(u=> (u.status||'').toLowerCase()==='rejected').length;
     }
 
-    // Show toast notification
-    function showToast(message, type = "success") {
-      const toast = document.getElementById("toast");
-      const toastIcon = document.getElementById("toast-icon");
-      const toastMessage = document.getElementById("toast-message");
-      
-      // Set icon based on type
-      if (type === "success") {
-        toastIcon.className = "fas fa-check-circle";
-      } else if (type === "error") {
-        toastIcon.className = "fas fa-exclamation-circle";
-      } else if (type === "warning") {
-        toastIcon.className = "fas fa-exclamation-triangle";
-      }
-      
-      toastMessage.textContent = message;
-      toast.className = `toast ${type} show`;
-      
-      // Hide after 3 seconds
-      setTimeout(() => {
-        toast.className = "toast";
-      }, 3000);
+    // Toast helper
+    function showToast(msg,type='success'){
+      const t = document.getElementById('toast'); const icon = document.getElementById('toast-icon'); const text = document.getElementById('toast-message');
+      if(type==='success') icon.className='fas fa-check-circle'; else if(type==='error') icon.className='fas fa-exclamation-circle'; else icon.className='fas fa-exclamation-triangle';
+      text.textContent = msg; t.className = `toast ${type} show`;
+      setTimeout(()=>{t.className='toast'},3000);
     }
 
-    // Form navigation
-    function nextPage(current, next) {
-      if (current === 1 && !validatePage1()) return;
-      if (current === 2 && !validatePage2()) return;
-      
-      document.getElementById(`page${current}`).classList.remove("active");
-      document.getElementById(`page${next}`).classList.add("active");
-      
-      // Update progress bar
-      const progress = document.getElementById("formProgress");
-      progress.style.width = `${(next-1) * 33.33}%`;
+    // Navigation pages & validation
+    function nextPage(current,next){
+      if(current===1 && !validatePage1()) return;
+      if(current===2 && !validatePage2()) return;
+      document.getElementById('page'+current).classList.remove('active');
+      document.getElementById('page'+next).classList.add('active');
+      const widths = {1:0,2:50,3:100}; document.getElementById('formProgress').style.width = widths[next] + '%';
     }
 
-    // Validate page 1
-    function validatePage1() {
-      let isValid = true;
-      
-      // Name validation
-      const name = document.getElementById('name');
-      if (!name.value.trim()) {
-        name.parentElement.classList.add('invalid');
-        isValid = false;
-      } else {
-        name.parentElement.classList.remove('invalid');
-      }
-      
-      // Phone validation
-      const phone = document.getElementById('phone');
+    function validatePage1(){
+      let ok=true;
+      const name=document.getElementById('name'), phone=document.getElementById('phone'), email=document.getElementById('email');
+      if(!name.value.trim()){document.getElementById('group-name').classList.add('invalid'); ok=false} else document.getElementById('group-name').classList.remove('invalid');
       const phoneRegex = /^01[3-9]\d{8}$/;
-      if (!phoneRegex.test(phone.value)) {
-        phone.parentElement.classList.add('invalid');
-        isValid = false;
-      } else {
-        phone.parentElement.classList.remove('invalid');
-      }
-      
-      // Email validation
-      const email = document.getElementById('email');
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email.value)) {
-        email.parentElement.classList.add('invalid');
-        isValid = false;
-      } else {
-        email.parentElement.classList.remove('invalid');
-      }
-      
-      return isValid;
-    }
-    
-    // Validate page 2
-    function validatePage2() {
-      let isValid = true;
-      
-      // Area validation
-      const area = document.getElementById('area');
-      if (!area.value.trim()) {
-        area.parentElement.classList.add('invalid');
-        isValid = false;
-      } else {
-        area.parentElement.classList.remove('invalid');
-      }
-      
-      // Word validation
-      const word = document.getElementById('word');
-      if (!word.value.trim()) {
-        word.parentElement.classList.add('invalid');
-        isValid = false;
-      } else {
-        word.parentElement.classList.remove('invalid');
-      }
-      
-      return isValid;
+      if(!phoneRegex.test(phone.value.trim())){document.getElementById('group-phone').classList.add('invalid'); ok=false} else document.getElementById('group-phone').classList.remove('invalid');
+      if(email.value && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value))){document.getElementById('group-email').classList.add('invalid'); ok=false} else document.getElementById('group-email').classList.remove('invalid');
+      return ok;
     }
 
-    // Validate form
-    function validateForm() {
-      if (!validatePage1() || !validatePage2()) {
-        showToast("Please fill all required fields correctly", "error");
-        return;
-      }
-      
-      // Photo validation
-      const photo = document.getElementById('photo');
-      if (!photo.files || !photo.files[0]) {
-        document.getElementById('photoError').style.display = 'block';
-        showToast("Please upload a photo", "error");
-        return;
-      }
-      
-      // Facebook validation (optional)
+    function validatePage2(){
+      let ok=true;
+      const area=document.getElementById('area'), word=document.getElementById('word');
+      if(!area.value.trim()){document.getElementById('group-area').classList.add('invalid'); ok=false} else document.getElementById('group-area').classList.remove('invalid');
+      if(!word.value.trim()){document.getElementById('group-word').classList.add('invalid'); ok=false} else document.getElementById('group-word').classList.remove('invalid');
+      return ok;
+    }
+
+    // IMPORTANT: Facebook must be provided and valid
+    function validateForm(){
+      if(!validatePage1()||!validatePage2()){showToast('Please fill required fields','error'); return}
       const facebook = document.getElementById('facebook');
-      if (facebook.value) {
-        try {
-          new URL(facebook.value);
-          facebook.parentElement.classList.remove('invalid');
-        } catch (e) {
-          facebook.parentElement.classList.add('invalid');
-          showToast("Please provide a valid Facebook URL", "error");
-          return;
-        }
+      if(!facebook.value.trim()){document.getElementById('group-facebook').classList.add('invalid'); showToast('Facebook লিঙ্ক দিতে হবে','error'); return}
+      try{
+        new URL(facebook.value.trim());
+        document.getElementById('group-facebook').classList.remove('invalid');
+      }catch(e){
+        document.getElementById('group-facebook').classList.add('invalid');
+        showToast('সঠিক Facebook লিঙ্ক দিন','error'); return;
       }
-      
       submitForm();
     }
 
-    // Submit form
-    function submitForm() {
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const email = document.getElementById("email").value;
-      const area = document.getElementById("area").value;
-      const word = document.getElementById("word").value;
-      const facebook = document.getElementById("facebook").value;
-      const photoInput = document.getElementById("photo");
-      
-      // Create a new user object
-      const newUser = {
-        id: Date.now(),
-        name,
-        phone,
-        email,
-        area,
-        word,
-        facebook: facebook || "N/A",
-        photo: "",
-        status: "pending",
-        date: new Date().toLocaleDateString('bn-BD')
-      };
-      
-      // Process photo
-      const photoFile = photoInput.files[0];
-      const reader = new FileReader();
-      
-      reader.onload = function(event) {
-        newUser.photo = event.target.result;
-        
-        // Add to users array
-        users.push(newUser);
-        localStorage.setItem("users", JSON.stringify(users));
-        
-        // Send to Telegram with photo
-        sendRegistrationToTelegram(newUser);
-        
-        // Show success message
-        document.getElementById("successMessage").style.display = "block";
-        
-        // Reset form
-        document.getElementById("userForm").reset();
-        document.getElementById("photoPreview").style.display = "none";
-        
-        // Go back to first page
-        document.querySelectorAll('.form-page').forEach(page => page.classList.remove('active'));
-        document.getElementById('page1').classList.add('active');
-        document.getElementById("formProgress").style.width = "0%";
-        
-        // Update stats if admin is logged in
-        if (isLoggedIn) {
-          updateStats();
-          renderTable();
+    // Submit: read photo (if any) -> save user -> push to telegram
+    function submitForm(){
+      const name=document.getElementById('name').value.trim();
+      const phone=document.getElementById('phone').value.trim();
+      const email=document.getElementById('email').value.trim();
+      const area=document.getElementById('area').value.trim();
+      const word=document.getElementById('word').value.trim();
+      const facebook=document.getElementById('facebook').value.trim();
+      const photoInput=document.getElementById('photo');
+
+      const newUser = { id: Date.now(), name, phone, email, area, word, facebook, photo: '', status: 'pending', date: new Date().toLocaleString('bn-BD') };
+
+      if(photoInput.files && photoInput.files[0]){
+        const file = photoInput.files[0];
+        if(!file.type.startsWith('image/')){showToast('Only image allowed','error'); return}
+        if(file.size > 5*1024*1024){showToast('Image must be < 5MB','error'); return}
+        const reader = new FileReader();
+        reader.onload = function(e){
+          newUser.photo = e.target.result; pushUser(newUser);
         }
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          document.getElementById("successMessage").style.display = "none";
-        }, 5000);
-      };
-      
-      reader.readAsDataURL(photoFile);
-    }
-
-    // Send registration data to Telegram with photo
-    function sendRegistrationToTelegram(user) {
-      const message = `
-🧹 *BD Clean Jurain - New Registration* 🧹
-        
-👤 *Name:* ${user.name}
-📞 *Phone:* ${user.phone}
-📧 *Email:* ${user.email}
-📍 *Area:* ${user.area}
-🏠 *Word No:* ${user.word}
-${user.facebook !== "N/A" ? `🔗 *Facebook:* ${user.facebook}` : ''}
-        
-📅 *Registration Date:* ${user.date}
-⏰ *Time:* ${new Date().toLocaleTimeString()}
-      `;
-      
-      // Send to registration group
-      sendToTelegram(message, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID);
-      
-      // Send photo to Telegram using a proxy service
-      sendPhotoToTelegram(user.photo, user.name, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID);
-    }
-
-    // Send photo to Telegram using a proxy
-    function sendPhotoToTelegram(photoDataUrl, userName, chatId) {
-      // This function would typically use a server-side endpoint
-      // to handle the image upload to Telegram
-      
-      // For now, we'll just log that the photo would be sent
-      console.log(`Photo for ${userName} would be sent to Telegram`);
-      
-      // In a real implementation, you would:
-      // 1. Send the photoDataUrl to your server
-      // 2. Your server would convert it to a file
-      // 3. Your server would use the Telegram Bot API to send the photo
-      
-      // Example of what the server-side code might look like:
-      /*
-      fetch('/api/upload-to-telegram', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          photo: photoDataUrl,
-          chatId: chatId,
-          caption: `Photo of ${userName}`
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Photo sent to Telegram:', data);
-      })
-      .catch(error => {
-        console.error('Error sending photo to Telegram:', error);
-      });
-      */
-    }
-
-    // Generic function to send messages to Telegram
-    function sendToTelegram(message, chatId) {
-      if (!TELEGRAM_CONFIG.BOT_TOKEN || !chatId || TELEGRAM_CONFIG.BOT_TOKEN === "YOUR_BOT_TOKEN") {
-        console.log("Telegram bot not configured properly");
-        return;
+        reader.readAsDataURL(file);
+      } else {
+        newUser.photo = null; pushUser(newUser);
       }
-      
-      const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`;
-      
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-          parse_mode: "Markdown"
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log("Message sent to Telegram:", data);
-      })
-      .catch(error => {
-        console.error("Error sending message to Telegram:", error);
-      });
     }
 
-    // Initialize the application when the page loads
-    window.onload = init;
+    function pushUser(newUser){
+      users.push(newUser); localStorage.setItem('users',JSON.stringify(users));
+      if(isLoggedIn){ updateStats(); renderTable(); }
+      sendRegistrationToTelegram(newUser);
+      showSuccessAndReset();
+    }
 
-    app.post('/api/upload-to-telegram', async (req, res) => {
-  const { photo, chatId, caption } = req.body;
-  
-  // Convert base64 to buffer
-  const base64Data = photo.replace(/^data:image\/\w+;base64,/, '');
-  const buffer = Buffer.from(base64Data, 'base64');
-  
-  // Send to Telegram
-  const formData = new FormData();
-  formData.append('chat_id', chatId);
-  formData.append('photo', buffer, { filename: 'user-photo.jpg' });
-  formData.append('caption', caption);
-  
-  try {
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-      method: 'POST',
-      body: formData
-    });
-    
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    function showSuccessAndReset(){
+      document.getElementById('successMessage').style.display='block';
+      setTimeout(()=>{document.getElementById('successMessage').style.display='none'},3500);
+      document.getElementById('userForm').reset();
+      document.getElementById('photoPreview').style.display='none';
+      document.querySelectorAll('.form-page').forEach(p=>p.classList.remove('active'));
+      document.getElementById('page1').classList.add('active');
+      document.getElementById('formProgress').style.width='0%';
+      updateStats();
+    }
+
+    // Preview & photo validations
+    function handlePhotoChange(e){
+      const file = e.target.files[0]; const preview = document.getElementById('photoPreview'); const err = document.getElementById('photoError');
+      if(!file){ preview.style.display='none'; return }
+      if(!file.type.startsWith('image/')){ err.textContent='শুধুমাত্র ইমেজ ফাইল অনুমোদিত'; err.style.display='block'; e.target.value=''; preview.style.display='none'; return }
+      if(file.size > 5*1024*1024){ err.textContent='ফাইলের আকার 5MB এর কম হতে হবে'; err.style.display='block'; e.target.value=''; preview.style.display='none'; return }
+      err.style.display='none'; const reader = new FileReader();
+      reader.onload = function(ev){ preview.src = ev.target.result; preview.style.display='block' }; reader.readAsDataURL(file);
+    }
+
+    // Telegram integration (text + photo). NOTE: For production use server proxy.
+    function sendRegistrationToTelegram(user){
+      const message = `*BD Clean Jurain - New Registration*\n👤 Name: ${user.name}\n📞 Phone: ${user.phone}\n📍 Area: ${user.area}\n🏘 Word: ${user.word}\n🔗 Facebook: ${user.facebook}\n📅 Date: ${user.date}`;
+      // first send text for quick notification (optional)
+      if(TELEGRAM_CONFIG.BOT_TOKEN && TELEGRAM_CONFIG.REGISTRATION_CHAT_ID){
+        sendToTelegram(message, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID);
+      } else {
+        console.log('Telegram not configured: message ->', message);
+      }
+      // if photo present send as photo with caption
+      if(user.photo){
+        if(TELEGRAM_CONFIG.BOT_TOKEN && TELEGRAM_CONFIG.REGISTRATION_CHAT_ID){
+          sendPhotoToTelegram(user.photo, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID, message);
+        } else {
+          console.log('Telegram not configured: photo available (not sent).');
+        }
+      }
+    }
+
+    function sendToTelegram(message, chatId){
+      if(!TELEGRAM_CONFIG.BOT_TOKEN || !chatId){ console.log('Telegram not configured'); return; }
+      fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'Markdown' })
+      }).then(r=>r.json()).then(d=>console.log('telegram sendMessage',d)).catch(e=>console.error(e));
+    }
+
+    // Convert base64 image to Blob and send using sendPhoto
+    function sendPhotoToTelegram(photoBase64, chatId, caption){
+      if(!TELEGRAM_CONFIG.BOT_TOKEN || !chatId){ console.log('Telegram not configured'); return; }
+
+      function b64toBlob(b64Data, contentType='', sliceSize=512){
+        const byteCharacters = atob(b64Data.split(',')[1]);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+          const slice = byteCharacters.slice(offset, offset + sliceSize);
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+        return new Blob(byteArrays, {type: contentType});
+      }
+
+      const contentType = detectImageMime(photoBase64) || 'image/jpeg';
+      const blob = b64toBlob(photoBase64, contentType);
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('photo', blob, 'photo.jpg');
+      if(caption) formData.append('caption', caption);
+      formData.append('parse_mode', 'Markdown');
+
+      fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendPhoto`, {
+        method: 'POST',
+        body: formData
+      }).then(r=>r.json()).then(d=>console.log('telegram sendPhoto',d)).catch(e=>console.error('sendPhoto error',e));
+    }
+
+    function detectImageMime(b64){
+      if(!b64) return null;
+      const head = b64.split(',')[0];
+      if(head.indexOf('image/png') !== -1) return 'image/png';
+      if(head.indexOf('image/jpeg') !== -1) return 'image/jpeg';
+      if(head.indexOf('image/webp') !== -1) return 'image/webp';
+      return null;
+    }
+
+    // helpers
+    function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+    // Initialize table from localStorage
+    function initStorageRender(){
+      // ensure users array exists
+      users = JSON.parse(localStorage.getItem('users') || '[]');
+      updateStats();
+      if(isLoggedIn) renderTable();
+    }
+
+    // small helpers used earlier
+    function saveUserToLocal(u){ users.push(u); localStorage.setItem('users',JSON.stringify(users)); }
+
+    // Initialize on load
+    window.onload = function(){ init(); initStorageRender(); }
+
   </script>
 </body>
 </html>
