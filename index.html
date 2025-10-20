@@ -1,562 +1,2522 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BD Clean Jurain - Registration (Final)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BD Clean Jurain - User Registration</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root{--primary:#00695c;--secondary:#4db6ac;--danger:#d32f2f;--success:#2e7d32;--muted:#6c757d}
-    *{box-sizing:border-box;font-family: "Noto Sans Bengali", "Segoe UI", sans-serif}
-    body{margin:0;background:linear-gradient(135deg,#e0f7fa 0%,#fff 100%);padding:16px;min-height:100vh}
-    header{background:var(--primary);color:#fff;padding:14px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 12px rgba(0,0,0,0.12)}
-    .header-left h1{font-size:18px;display:flex;align-items:center;gap:10px}
-    .header-right{display:flex;align-items:center;gap:12px;font-size:14px}
-    .btn-sm{padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
-    .login-btn{background:rgba(255,255,255,0.12);color:#fff}
-    .logout-btn{background:rgba(255,255,255,0.12);color:#fff;display:none}
+    :root {
+      --primary: #00695c;
+      --secondary: #4db6ac;
+      --success: #2e7d32;
+      --danger: #d32f2f;
+      --warning: #ff9800;
+      --info: #1976d2;
+      --dark: #333;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-    .main{display:flex;gap:20px;align-items:flex-start;justify-content:center;margin-top:18px}
-    .container{width:100%;max-width:820px;background:#fff;padding:22px;border-radius:12px;box-shadow:0 15px 30px rgba(0,0,0,0.08);position:relative}
-    .container::before{content:'';position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,var(--primary),var(--secondary));border-top-left-radius:12px;border-top-right-radius:12px}
-    h2{color:var(--primary);text-align:center;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px}
-    .header-info{display:flex;justify-content:center;gap:14px;color:#555;margin-bottom:14px;flex-wrap:wrap}
+    body {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-    .progress-bar{height:8px;background:#eee;border-radius:999px;margin-bottom:14px;overflow:hidden}
-    .progress{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .35s}
+    /* Header Styles */
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    
+    .header-left h1 {
+      margin: 0;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
 
-    .form-page{display:none}
-    .form-page.active{display:block}
+    .login-btn, .logout-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
 
-    .form-group{margin-bottom:14px}
-    label{display:block;margin-bottom:6px;font-weight:600;color:#444}
-    input[type=text],input[type=tel],input[type=email],input[type=url],select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;background:#fbfbfb;font-size:15px}
-    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(0,105,92,0.06);background:#fff}
-    .error-text{color:var(--danger);font-size:13px;margin-top:6px;display:none}
-    .invalid input,.invalid select{border-color:var(--danger)}
+    .login-btn:hover, .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
 
-    .btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#f1f1f1;color:#333}
-    .btn-inline{width:auto;padding:10px 16px}
+    .logout-btn {
+      display: none;
+    }
 
-    .photo-preview{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #eee;margin-bottom:12px;display:none}
-    .upload-btn{display:inline-block;padding:10px 16px;border-radius:6px;background:var(--primary);color:#fff;position:relative;cursor:pointer}
-    .upload-btn input{position:absolute;left:0;top:0;opacity:0;width:100%;height:100%;cursor:pointer}
+    /* Main Content Container */
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1200px;
+    }
 
-    .terms{background:#fafafa;border:1px solid #eee;padding:12px;border-radius:8px;font-size:14px;max-height:150px;overflow:auto}
+    /* Registration Form Styles */
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 600px;
+      animation: fadeIn 0.8s ease;
+      position: relative;
+      overflow: hidden;
+    }
 
-    .footer{text-align:center;color:#666;margin-top:12px}
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
 
-    /* Admin panel */
-    .admin-panel{display:none;width:100%}
-    .dashboard-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:14px 0}
-    .stat-card{background:#fff;border-radius:8px;padding:12px;box-shadow:0 2px 5px rgba(0,0,0,0.05);text-align:center}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    .controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-    .search-box{position:relative;flex:1;min-width:220px}
-    .search-box input{padding:10px 14px 10px 38px}
-    .search-box i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
-    .filter-buttons{display:flex;gap:8px;flex-wrap:wrap}
-    .filter-btn{padding:8px 12px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
-    .filter-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
 
-    .table-container{background:#fff;padding:12px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.08);overflow:auto}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:10px;border:1px solid #eee;text-align:center}
-    thead th{position:sticky;top:0;background:var(--primary);color:#fff}
+    .header-info {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
 
-    .action-buttons{display:flex;gap:6px;justify-content:center}
-    .action-btn{padding:6px 8px;border-radius:6px;border:none;color:#fff;cursor:pointer}
+    .header-info p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-    /* modal */
-    .modal{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:1000}
-    .modal-content{background:#fff;padding:18px;border-radius:8px;width:520px;max-width:95%;max-height:90vh;overflow:auto}
+    .progress-bar {
+      height: 5px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
 
-    .toast{position:fixed;right:18px;bottom:18px;padding:12px 16px;border-radius:6px;color:#fff;display:flex;align-items:center;gap:10px;z-index:1100;transform:translateY(20px);opacity:0;transition:.3s}
-    .toast.show{opacity:1;transform:none}
-    .toast.success{background:var(--success)}.toast.error{background:var(--danger)}.toast.warning{background:var(--secondary)}
+    .progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      width: 0%;
+      transition: width 0.5s ease;
+    }
 
-    @media(max-width:900px){header{flex-direction:column;align-items:flex-start} .container{padding:16px}}
+    .form-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    .form-page {
+      display: none;
+    }
+
+    .form-page.active {
+      display: block;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: #f9f9f9;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      background: #fff;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,105,92,0.2);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-group .error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .form-group.invalid input, .form-group.invalid select, .form-group.invalid textarea {
+      border-color: var(--danger);
+    }
+
+    .form-group.invalid .error {
+      display: block;
+    }
+
+    .btn {
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #f1f1f1;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e5e5;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-nav {
+      width: auto;
+      padding: 12px 20px;
+      flex: 1;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .photo-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 15px 0;
+    }
+
+    .photo-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #eee;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .upload-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      cursor: pointer;
+      background: var(--info);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .upload-btn:hover {
+      background: #1565c0;
+    }
+
+    .upload-btn input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .terms {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Conditional Fields */
+    .conditional-field {
+      display: none;
+    }
+
+    .conditional-field.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* T-shirt size options */
+    .tshirt-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tshirt-option {
+      flex: 1;
+      min-width: 60px;
+      text-align: center;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tshirt-option:hover {
+      border-color: var(--primary);
+    }
+
+    .tshirt-option.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Address Type Selection */
+    .address-type {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .address-option {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .address-option:hover {
+      border-color: var(--primary);
+    }
+
+    .address-option.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Admin Panel Styles (Hidden by Default) */
+    .admin-panel {
+      display: none;
+      width: 100%;
+    }
+
+    /* Dashboard Stats */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .stat-card i {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .stat-card.total i { color: var(--primary); }
+    .stat-card.pending i { color: var(--warning); }
+    .stat-card.approved i { color: var(--success); }
+    .stat-card.rejected i { color: var(--danger); }
+    
+    .stat-card h3 {
+      font-size: 28px;
+      margin: 5px 0;
+    }
+    
+    .stat-card p {
+      color: var(--gray);
+      font-size: 14px;
+    }
+    
+    /* Filter and Search */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 0 0 20px 0;
+      align-items: center;
+    }
+    
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+    
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 8px 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    /* Table Styles */
+    .table-container {
+      width: 100%;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    
+    table th {
+      background: var(--primary);
+      color: #fff;
+      position: sticky;
+      top: 0;
+    }
+    
+    table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    
+    /* Status Colors */
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-approved { background: #d4edda; color: #155724; }
+    .status-hold { background: #e2e3e5; color: #383d41; }
+    .status-rejected { background: #f8d7da; color: #721c24; }
+    .status-edited { background: #cce5ff; color: #004085; }
+    
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+    
+    .action-btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #fff;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .approve { background: var(--success); }
+    .approve:hover { background: #1b5e20; }
+    
+    .hold { background: var(--warning); }
+    .hold:hover { background: #f57c00; }
+    
+    .reject { background: var(--danger); }
+    .reject:hover { background: #c62828; }
+    
+    .edit { background: var(--info); }
+    .edit:hover { background: #1565c0; }
+    
+    .delete { background: var(--gray); }
+    .delete:hover { background: #495057; }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      width: 450px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--gray);
+    }
+    
+    .form-group-modal {
+      margin-bottom: 15px;
+    }
+    
+    .form-group-modal label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group-modal input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .modal-actions button {
+      flex: 1;
+      padding: 10px;
+    }
+    
+    .btn-cancel {
+      background: var(--gray);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .btn-save {
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #333;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 4px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--danger); }
+    .toast.warning { background: var(--warning); }
+    
+    /* Login Modal */
+    .login-modal {
+      display: none;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .login-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      width: 400px;
+      max-width: 90%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* WhatsApp & Telegram Page Styles */
+    .whatsapp-page, .telegram-page {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .success-message {
+      text-align: center;
+      padding: 20px;
+      background: #d4edda;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      border: 1px solid #c3e6cb;
+    }
+
+    .success-message i {
+      font-size: 50px;
+      color: #28a745;
+      margin-bottom: 15px;
+    }
+
+    .success-message h3 {
+      color: #155724;
+      margin-bottom: 10px;
+    }
+
+    .success-message p {
+      color: #155724;
+      font-size: 16px;
+    }
+
+    .whatsapp-info, .telegram-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .info-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #e9ecef;
+      transition: transform 0.3s;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .info-card i {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .whatsapp-info .info-card i {
+      color: #25D366;
+    }
+
+    .telegram-info .info-card i {
+      color: #0088cc;
+    }
+
+    .info-card h4 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .info-card p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .whatsapp-group-link, .telegram-group-link {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 10px;
+      margin: 25px 0;
+      border: 1px solid #e9ecef;
+    }
+
+    .whatsapp-group-link h4, .telegram-group-link h4 {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .whatsapp-group-link h4 i {
+      color: #25D366;
+    }
+
+    .telegram-group-link h4 i {
+      color: #0088cc;
+    }
+
+    .link-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .link-container input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .whatsapp-join-btn {
+      background: #25D366;
+      margin-top: 10px;
+    }
+
+    .whatsapp-join-btn:hover {
+      background: #128C7E;
+    }
+
+    .telegram-join-btn {
+      background: #0088cc;
+      margin-top: 10px;
+    }
+
+    .telegram-join-btn:hover {
+      background: #006699;
+    }
+
+    .additional-info {
+      background: #fff3cd;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 25px 0;
+      border: 1px solid #ffeaa7;
+    }
+
+    .additional-info h4 {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #856404;
+    }
+
+    .additional-info ul {
+      padding-left: 20px;
+      color: #856404;
+    }
+
+    .additional-info li {
+      margin-bottom: 8px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .action-buttons .btn {
+      flex: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .header-right {
+        align-self: stretch;
+        justify-content: space-between;
+      }
+      
+      .dashboard-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      table th, table td {
+        padding: 8px 5px;
+        font-size: 14px;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-buttons {
+        justify-content: center;
+      }
+      
+      .form-nav {
+        flex-direction: column;
+      }
+      
+      .btn-nav {
+        width: 100%;
+      }
+      
+      .tshirt-options {
+        justify-content: center;
+      }
+      
+      .address-type {
+        flex-direction: column;
+      }
+      
+      .whatsapp-info, .telegram-info {
+        grid-template-columns: 1fr;
+      }
+      
+      .link-container {
+        flex-direction: column;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .dashboard-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="header-left"><h1><i class="fas fa-broom"></i> BD Clean Jurain</h1></div>
+    <div class="header-left">
+      <h1><i class="fas fa-broom"></i> BD Clean Jurain</h1>
+    </div>
     <div class="header-right">
-      <div id="dateTime" aria-live="polite"></div>
-      <div id="ipAddress" aria-live="polite"></div>
-      <button id="loginButton" class="btn-sm login-btn" onclick="openLoginModal()"><i class="fas fa-sign-in-alt"></i> Login</button>
-      <button id="logoutButton" class="btn-sm logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      <p id="dateTime">লোড হচ্ছে...</p>
+      <p id="ipAddress" style="display:none;">IP: লোড হচ্ছে...</p>
+      <button class="login-btn" id="loginButton" onclick="openLoginModal()">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </button>
+      <button class="logout-btn" id="logoutButton" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
     </div>
   </header>
 
-  <main class="main">
-    <!-- Registration container -->
-    <section class="container" id="registrationForm" aria-labelledby="formTitle">
-      <h2 id="formTitle"><i class="fas fa-broom"></i> সদস্য নিবন্ধন</h2>
-
+  <div class="main-container">
+    <!-- User Registration Form -->
+    <div class="container" id="registrationForm">
+      <h2><i class="fas fa-broom"></i> BD Clean Jurain</h2>
       <div class="header-info">
-        <div id="date"><i class="fas fa-calendar-alt"></i> <span></span></div>
-        <div id="time"><i class="fas fa-clock"></i> <span></span></div>
-        <div id="ip"><i class="fas fa-globe"></i> <span></span></div>
+        <p id="date"><i class="fas fa-calendar-alt"></i> <span>লোড হচ্ছে...</span></p>
+        <p id="time"><i class="fas fa-clock"></i> <span>লোড হচ্ছে...</span></p>
       </div>
 
-      <div class="progress-bar" aria-hidden="true"><div id="formProgress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div></div>
+      <div class="progress-bar">
+        <div class="progress" id="formProgress"></div>
+      </div>
 
-      <form id="userForm" novalidate>
-        <!-- Page 1 -->
-        <div id="page1" class="form-page active">
-          <div class="form-group" id="group-name">
-            <label for="name">পূর্ণ নাম</label>
-            <input id="name" type="text" placeholder="আপনার পূর্ণ নাম লিখুন" required aria-required="true">
-            <div class="error-text">দয়া করে আপনার নাম লিখুন</div>
+      <form id="userForm">
+        <!-- Page 1: Personal Information -->
+        <div class="form-page active" id="page1">
+          <div class="form-group">
+            <label for="name"><i class="fas fa-user"></i> পূর্ণ নাম:</label>
+            <input type="text" id="name" placeholder="আপনার পূর্ণ নাম লিখুন" required>
+            <div class="error">দয়া করে আপনার নাম লিখুন</div>
           </div>
-
-          <div class="form-group" id="group-phone">
-            <label for="phone">ফোন নম্বর</label>
-            <input id="phone" type="tel" placeholder="01XXXXXXXXX" required aria-required="true">
-            <div class="error-text">সঠিক ফোন নম্বর লিখুন (বাংলাদেশ)</div>
+          
+          <div class="form-group">
+            <label for="phone"><i class="fas fa-phone"></i> ফোন নম্বর:</label>
+            <input type="tel" id="phone" placeholder="01XXXXXXXXX" required>
+            <div class="error">সঠিক ফোন নম্বর লিখুন</div>
           </div>
-
-          <div class="form-group" id="group-email">
-            <label for="email">ইমেইল</label>
-            <input id="email" type="email" placeholder="example@gmail.com">
-            <div class="error-text">সঠিক ইমেইল লিখুন</div>
+          
+          <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> ইমেইল:</label>
+            <input type="email" id="email" placeholder="example@gmail.com" required>
+            <div class="error">সঠিক ইমেইল ঠিকানা লিখুন</div>
           </div>
-
-          <button type="button" class="btn btn-inline" onclick="nextPage(1,2)">পরবর্তী <i class="fas fa-arrow-right"></i></button>
+          
+          <div class="form-group">
+            <label for="dob"><i class="fas fa-calendar"></i> জন্ম তারিখ:</label>
+            <input type="date" id="dob" required>
+            <div class="error">দয়া করে জন্ম তারিখ নির্বাচন করুন</div>
+          </div>
+          
+          <button type="button" class="btn btn-full" onclick="nextPage(1, 2)">
+            পরবর্তী <i class="fas fa-arrow-right"></i>
+          </button>
         </div>
 
-        <!-- Page 2 -->
-        <div id="page2" class="form-page">
-          <div class="form-group" id="group-area">
-            <label for="area">এলাকার নাম</label>
-            <input id="area" type="text" placeholder="আপনার এলাকার নাম লিখুন" required>
-            <div class="error-text">দয়া করে এলাকার নাম লিখুন</div>
+        <!-- Page 2: Address & Reference Information -->
+        <div class="form-page" id="page2">
+          <div class="form-group">
+            <label for="area"><i class="fas fa-map-marker-alt"></i> বর্তমান এলাকার নাম:</label>
+            <input type="text" id="area" placeholder="আপনার বর্তমান এলাকার নাম লিখুন" required>
+            <div class="error">দয়া করে বর্তমান এলাকার নাম লিখুন</div>
           </div>
-
-          <div class="form-group" id="group-word">
-            <label for="word">ওয়ার্ড নম্বর</label>
-            <input id="word" type="text" placeholder="ওয়ার্ড নম্বর লিখুন" required>
-            <div class="error-text">ওয়ার্ড নম্বর লিখুন</div>
+          
+          <div class="form-group">
+            <label for="word"><i class="fas fa-home"></i> বর্তমান ওয়ার্ড নম্বর:</label>
+            <input type="text" id="word" placeholder="বর্তমান ওয়ার্ড নম্বর লিখুন" required>
+            <div class="error">দয়া করে বর্তমান ওয়ার্ড নম্বর লিখুন</div>
           </div>
-
-          <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
-            <button type="button" class="btn secondary btn-inline" onclick="nextPage(2,1)"><i class="fas fa-arrow-left"></i> পূর্ববর্তী</button>
-            <button type="button" class="btn btn-inline" onclick="nextPage(2,3)">পরবর্তী <i class="fas fa-arrow-right"></i></button>
+          
+          <div class="form-group">
+            <label for="permanentAddress"><i class="fas fa-map-marked-alt"></i> স্থায়ী ঠিকানা:</label>
+            <textarea id="permanentAddress" placeholder="আপনার সম্পূর্ণ স্থায়ী ঠিকানা লিখুন (গ্রাম, ডাকঘর, থানা, জেলা সহ)"></textarea>
+            <div class="error">দয়া করে স্থায়ী ঠিকানা লিখুন</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="facebook"><i class="fab fa-facebook"></i> ফেসবুক প্রোফাইল লিঙ্ক:</label>
+            <input type="url" id="facebook" placeholder="https://facebook.com/username" required>
+            <div class="error">সঠিক ফেসবুক লিঙ্ক লিখুন</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="reference"><i class="fas fa-user-friends"></i> রেফারেন্স:</label>
+            <select id="reference" required onchange="toggleReferenceFields()">
+              <option value="">রেফারেন্স নির্বাচন করুন</option>
+              <option value="facebook">ফেসবুক</option>
+              <option value="youtube">ইউটিউব</option>
+              <option value="bdclean">বিডি ক্লিন মেম্বার</option>
+              <option value="others">অন্যান্য</option>
+            </select>
+            <div class="error">দয়া করে রেফারেন্স নির্বাচন করুন</div>
+          </div>
+          
+          <!-- Conditional Fields for Reference -->
+          <div id="bdcleanField" class="conditional-field">
+            <div class="form-group">
+              <label for="refMemberName"><i class="fas fa-user"></i> রেফারেন্স মেম্বারের নাম:</label>
+              <input type="text" id="refMemberName" placeholder="রেফারেন্স মেম্বারের নাম">
+            </div>
+            <div class="form-group">
+              <label for="refMemberContact"><i class="fas fa-phone"></i> রেফারেন্স মেম্বারের ফোন নম্বর:</label>
+              <input type="tel" id="refMemberContact" placeholder="01XXXXXXXXX">
+            </div>
+          </div>
+          
+          <div id="othersField" class="conditional-field">
+            <div class="form-group">
+              <label for="otherReference"><i class="fas fa-pen"></i> রেফারেন্স লিখুন:</label>
+              <input type="text" id="otherReference" placeholder="রেফারেন্স লিখুন">
+            </div>
+          </div>
+          
+          <div class="form-nav">
+            <button type="button" class="btn btn-secondary btn-nav" onclick="prevPage(2)">
+              <i class="fas fa-arrow-left"></i> পূর্ববর্তী
+            </button>
+            <button type="button" class="btn btn-nav" onclick="nextPage(2, 3)">
+              পরবর্তী <i class="fas fa-arrow-right"></i>
+            </button>
           </div>
         </div>
 
-        <!-- Page 3 -->
-        <div id="page3" class="form-page">
-          <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:12px">
-            <img id="photoPreview" class="photo-preview" alt="আপলোডকৃত ছবি">
-            <label class="upload-btn"> <i class="fas fa-camera"></i> ফটো আপলোড
-              <input id="photo" type="file" accept="image/*">
+        <!-- Page 3: Identity & Personal Details -->
+        <div class="form-page" id="page3">
+          <div class="form-group">
+            <label for="nationality"><i class="fas fa-flag"></i> জাতীয়তা:</label>
+            <select id="nationality" required>
+              <option value="">জাতীয়তা নির্বাচন করুন</option>
+              <option value="bangladeshi">বাংলাদেশী</option>
+              <option value="other">অন্যান্য</option>
+            </select>
+            <div class="error">দয়া করে জাতীয়তা নির্বাচন করুন</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="identity"><i class="fas fa-id-card"></i> পরিচয়পত্র:</label>
+            <select id="identity" required onchange="toggleIdentityFields()">
+              <option value="">পরিচয়পত্র নির্বাচন করুন</option>
+              <option value="nid">জাতীয় পরিচয়পত্র (NID)</option>
+              <option value="passport">পাসপোর্ট</option>
+              <option value="birth">জন্ম নিবন্ধন</option>
+              <option value="driving">ড্রাইভিং লাইসেন্স</option>
+            </select>
+            <div class="error">দয়া করে পরিচয়পত্র নির্বাচন করুন</div>
+          </div>
+          
+          <!-- Conditional Fields for Identity -->
+          <div id="identityNumberField" class="conditional-field">
+            <div class="form-group">
+              <label for="identityNumber"><i class="fas fa-id-card"></i> পরিচয়পত্র নম্বর:</label>
+              <input type="text" id="identityNumber" placeholder="পরিচয়পত্র নম্বর লিখুন">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="bloodGroup"><i class="fas fa-tint"></i> রক্তের গ্রুপ:</label>
+            <select id="bloodGroup" required>
+              <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            <div class="error">দয়া করে রক্তের গ্রুপ নির্বাচন করুন</div>
+          </div>
+          
+          <div class="form-nav">
+            <button type="button" class="btn btn-secondary btn-nav" onclick="prevPage(3)">
+              <i class="fas fa-arrow-left"></i> পূর্ববর্তী
+            </button>
+            <button type="button" class="btn btn-nav" onclick="nextPage(3, 4)">
+              পরবর্তী <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Page 4: Photo & Additional Details -->
+        <div class="form-page" id="page4">
+          <div class="photo-upload-container">
+            <img id="photoPreview" class="photo-preview" alt="Photo Preview">
+            <label class="upload-btn">
+              <i class="fas fa-camera"></i> ফটো আপলোড করুন
+              <input type="file" id="photo" accept="image/*" required>
             </label>
-            <div class="error-text" id="photoError">দয়া করে একটি ফটো আপলোড করুন (অপশনাল)</div>
+            <div class="error" id="photoError">দয়া করে একটি ফটো আপলোড করুন</div>
           </div>
-
-          <div class="form-group" id="group-facebook">
-            <label for="facebook">ফেসবুক প্রোফাইল লিঙ্ক (আবশ্যক)</label>
-            <input id="facebook" type="url" placeholder="https://facebook.com/username" required>
-            <div class="error-text">সঠিক Facebook URL লিখুন (অনুপস্থিত নয়)</div>
+          
+          <div class="form-group">
+            <label for="gender"><i class="fas fa-venus-mars"></i> লিঙ্গ:</label>
+            <select id="gender" required>
+              <option value="">লিঙ্গ নির্বাচন করুন</option>
+              <option value="male">পুরুষ</option>
+              <option value="female">মহিলা</option>
+              <option value="other">অন্যান্য</option>
+            </select>
+            <div class="error">দয়া করে লিঙ্গ নির্বাচন করুন</div>
           </div>
-
-          <div class="terms" aria-label="Terms and conditions">
-            <h4><i class="fas fa-info-circle"></i> নিয়ম ও শর্তাবলী</h4>
+          
+          <div class="form-group">
+            <label for="religion"><i class="fas fa-pray"></i> ধর্ম:</label>
+            <select id="religion" required>
+              <option value="">ধর্ম নির্বাচন করুন</option>
+              <option value="islam">ইসলাম</option>
+              <option value="hinduism">হিন্দু</option>
+              <option value="christianity">খ্রিস্টান</option>
+              <option value="buddhism">বৌদ্ধ</option>
+              <option value="other">অন্যান্য</option>
+            </select>
+            <div class="error">দয়া করে ধর্ম নির্বাচন করুন</div>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-tshirt"></i> টি-শার্ট সাইজ:</label>
+            <div class="tshirt-options">
+              <div class="tshirt-option" data-size="S">S</div>
+              <div class="tshirt-option" data-size="M">M</div>
+              <div class="tshirt-option" data-size="L">L</div>
+              <div class="tshirt-option" data-size="XL">XL</div>
+              <div class="tshirt-option" data-size="XXL">XXL</div>
+              <div class="tshirt-option" data-size="XXXL">XXXL</div>
+            </div>
+            <input type="hidden" id="tshirtSize" required>
+            <div class="error">দয়া করে টি-শার্ট সাইজ নির্বাচন করুন</div>
+          </div>
+          
+          <div class="terms">
+            <h4><i class="fas fa-info-circle"></i> নিয়ম ও শর্তাবলী:</h4>
             <p>১. আবেদনকারীকে অবশ্যই বাংলাদেশের নাগরিক হতে হবে।</p>
             <p>২. প্রদত্ত সকল তথ্য সঠিক ও নির্ভুল হতে হবে।</p>
             <p>৩. ভুল তথ্য প্রদানের দায়ভার আবেদনকারীর নিজের।</p>
             <p>৪. আবেদন গ্রহণ বা বাতিল করার সম্পূর্ণ অধিকার BD Clean Jurain কর্তৃপক্ষের কাছে সংরক্ষিত।</p>
           </div>
-
-          <div style="display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:12px">
-            <button type="button" class="btn secondary btn-inline" onclick="nextPage(3,2)"><i class="fas fa-arrow-left"></i> পূর্ববর্তী</button>
-            <button type="button" class="btn btn-inline" onclick="validateForm()"><i class="fas fa-paper-plane"></i> জমা দিন</button>
+          
+          <div class="form-nav">
+            <button type="button" class="btn btn-secondary btn-nav" onclick="prevPage(4)">
+              <i class="fas fa-arrow-left"></i> পূর্ববর্তী
+            </button>
+            <button type="button" class="btn btn-nav" onclick="validateForm()">
+              <i class="fas fa-paper-plane"></i> জমা দিন
+            </button>
           </div>
         </div>
       </form>
 
-      <div id="successMessage" class="message success" style="display:none;margin-top:12px;padding:12px;border-radius:8px;background:#d4edda;color:#155724">✅ আপনার আবেদন সফলভাবে জমা হয়েছে!</div>
-      <div id="errorMessage" class="message error" style="display:none;margin-top:12px;padding:12px;border-radius:8px;background:#f8d7da;color:#721c24"></div>
-
-      <div class="footer">BD Clean Jurain &copy; <span id="year"></span> | সকল অধিকার সংরক্ষিত</div>
-    </section>
-
-    <!-- Admin panel -->
-    <aside class="admin-panel" id="adminPanel">
-      <div class="dashboard-stats">
-        <div class="stat-card"><i class="fas fa-users"></i><h3 id="totalUsers">0</h3><p>মোট সদস্য</p></div>
-        <div class="stat-card"><i class="fas fa-clock"></i><h3 id="pendingUsers">0</h3><p>Pending</p></div>
-        <div class="stat-card"><i class="fas fa-check-circle"></i><h3 id="approvedUsers">0</h3><p>Approved</p></div>
-        <div class="stat-card"><i class="fas fa-times-circle"></i><h3 id="rejectedUsers">0</h3><p>Rejected</p></div>
+      <div id="successMessage" class="message success">
+        <i class="fas fa-check-circle"></i> আপনার আবেদন সফলভাবে জমা হয়েছে!
+      </div>
+      
+      <div id="errorMessage" class="message error">
+        <i class="fas fa-exclamation-circle"></i> <span id="errorText">একটি ত্রুটি হয়েছে। আবার চেষ্টা করুন।</span>
       </div>
 
-      <div class="controls">
-        <div class="search-box"><i class="fas fa-search"></i><input id="searchInput" placeholder="Search users..."></div>
-        <div class="filter-buttons">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="pending">Pending</button>
-          <button class="filter-btn" data-filter="approved">Approved</button>
-          <button class="filter-btn" data-filter="rejected">Rejected</button>
+      <div class="footer">
+        <p>BD Clean Jurain &copy; 2023 | সকল অধিকার সংরক্ষিত</p>
+      </div>
+    </div>
+
+    <!-- Admin Panel (Hidden by Default) -->
+    <div class="admin-panel" id="adminPanel">
+      <!-- Dashboard Stats -->
+      <div class="dashboard-stats">
+        <div class="stat-card total">
+          <i class="fas fa-users"></i>
+          <h3 id="totalUsers">0</h3>
+          <p>Total Users</p>
+        </div>
+        <div class="stat-card pending">
+          <i class="fas fa-clock"></i>
+          <h3 id="pendingUsers">0</h3>
+          <p>Pending</p>
+        </div>
+        <div class="stat-card approved">
+          <i class="fas fa-check-circle"></i>
+          <h3 id="approvedUsers">0</h3>
+          <p>Approved</p>
+        </div>
+        <div class="stat-card rejected">
+          <i class="fas fa-times-circle"></i>
+          <h3 id="rejectedUsers">0</h3>
+          <p>Rejected</p>
         </div>
       </div>
 
-      <div class="table-container"><table id="userTable"><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Area</th><th>Word</th><th>Photo</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
-    </aside>
-  </main>
+      <!-- Filter and Search Controls -->
+      <div class="controls">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search users...">
+        </div>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-layer-group"></i> All
+          </button>
+          <button class="filter-btn" data-filter="pending">
+            <i class="fas fa-clock"></i> Pending
+          </button>
+          <button class="filter-btn" data-filter="approved">
+            <i class="fas fa-check-circle"></i> Approved
+          </button>
+          <button class="filter-btn" data-filter="rejected">
+            <i class="fas fa-times-circle"></i> Rejected
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="table-container">
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>DOB</th>
+              <th>Current Area</th>
+              <th>Current Word</th>
+              <th>Permanent Address</th>
+              <th>Facebook</th>
+              <th>Reference</th>
+              <th>Nationality</th>
+              <th>Identity</th>
+              <th>Blood Group</th>
+              <th>Gender</th>
+              <th>Religion</th>
+              <th>T-Shirt</th>
+              <th>Photo</th>
+              <th>Status</th>
+              <th>Registration Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WhatsApp Group Page (Hidden by Default) -->
+    <div class="whatsapp-page" id="whatsappPage" style="display: none;">
+      <div class="container">
+        <h2><i class="fab fa-whatsapp"></i> WhatsApp গ্রুপে যোগ দিন</h2>
+        
+        <div class="success-message">
+          <i class="fas fa-check-circle"></i>
+          <h3>আপনার আবেদন সফলভাবে জমা হয়েছে!</h3>
+          <p>এখন আমাদের WhatsApp গ্রুপে যোগ দিন এবং কমিউনিটির সাথে সংযুক্ত থাকুন</p>
+        </div>
+        
+        <div class="whatsapp-info">
+          <div class="info-card">
+            <i class="fas fa-users"></i>
+            <h4>সক্রিয় কমিউনিটি</h4>
+            <p>২০০+ সদস্যের সাথে সংযুক্ত হোন</p>
+          </div>
+          
+          <div class="info-card">
+            <i class="fas fa-bullhorn"></i>
+            <h4>সর্বশেষ আপডেট</h4>
+            <p>নতুন ইভেন্ট ও কার্যক্রম সম্পর্কে জানুন</p>
+          </div>
+          
+          <div class="info-card">
+            <i class="fas fa-handshake"></i>
+            <h4>সহযোগিতা</h4>
+            <p>অন্যান্য স্বেচ্ছাসেবকদের সাথে সহযোগিতা করুন</p>
+          </div>
+        </div>
+        
+        <div class="whatsapp-group-link">
+          <h4><i class="fab fa-whatsapp"></i> WhatsApp গ্রুপ লিঙ্ক</h4>
+          <div class="link-container">
+            <input type="text" id="whatsappLink" value="https://www.whatsapp.com/channel/0029Vb8cyKGFSAt7pnYJug3P" readonly>
+            <button class="btn" onclick="copyWhatsAppLink()">
+              <i class="fas fa-copy"></i> কপি করুন
+            </button>
+          </div>
+          <a href="https://www.whatsapp.com/channel/0029Vb8cyKGFSAt7pnYJug3P" target="_blank" class="btn btn-full whatsapp-join-btn">
+            <i class="fab fa-whatsapp"></i> WhatsApp গ্রুপে যোগ দিন
+          </a>
+        </div>
+        
+        <div class="additional-info">
+          <h4><i class="fas fa-info-circle"></i> গুরুত্বপূর্ণ তথ্য</h4>
+          <ul>
+            <li>গ্রুপে যোগ দেওয়ার পর নিজের নাম দিয়ে পরিচয় দিন</li>
+            <li>গ্রুপের নিয়মাবলী মেনে চলুন</li>
+            <li>যেকোনো সমস্যায় অ্যাডমিনদের সাথে যোগাযোগ করুন</li>
+          </ul>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-secondary" onclick="goBackToForm()">
+            <i class="fas fa-arrow-left"></i> ফরমে ফিরে যান
+          </button>
+          <button class="btn" onclick="goToTelegram()">
+            <i class="fab fa-telegram"></i> টেলিগ্রামে যোগ দিন
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Telegram Group Page (Hidden by Default) -->
+    <div class="telegram-page" id="telegramPage" style="display: none;">
+      <div class="container">
+        <h2><i class="fab fa-telegram"></i> টেলিগ্রাম চ্যানেলে যোগ দিন</h2>
+        
+        <div class="success-message">
+          <i class="fas fa-check-circle"></i>
+          <h3>WhatsApp গ্রুপে স্বাগতম!</h3>
+          <p>এখন আমাদের টেলিগ্রাম চ্যানেলেও যোগ দিন এবং আরও আপডেট পান</p>
+        </div>
+        
+        <div class="telegram-info">
+          <div class="info-card">
+            <i class="fas fa-broadcast-tower"></i>
+            <h4>অফিসিয়াল ঘোষণা</h4>
+            <p>সরকারী ঘোষণা ও গুরুত্বপূর্ণ আপডেট</p>
+          </div>
+          
+          <div class="info-card">
+            <i class="fas fa-newspaper"></i>
+            <h4>নিয়মিত আপডেট</h4>
+            <p>কমিউনিটি সম্পর্কিত সর্বশেষ খবর</p>
+          </div>
+          
+          <div class="info-card">
+            <i class="fas fa-photo-video"></i>
+            <h4>মিডিয়া শেয়ার</h4>
+            <p>ইভেন্টের ছবি ও ভিডিও দেখুন</p>
+          </div>
+        </div>
+        
+        <div class="telegram-group-link">
+          <h4><i class="fab fa-telegram"></i> টেলিগ্রাম চ্যানেল লিঙ্ক</h4>
+          <div class="link-container">
+            <input type="text" id="telegramLink" value="https://t.me/bdcleanjurain" readonly>
+            <button class="btn" onclick="copyTelegramLink()">
+              <i class="fas fa-copy"></i> কপি করুন
+            </button>
+          </div>
+          <a href="https://t.me/bdcleanjurain" target="_blank" class="btn btn-full telegram-join-btn">
+            <i class="fab fa-telegram"></i> টেলিগ্রাম চ্যানেলে যোগ দিন
+          </a>
+        </div>
+        
+        <div class="additional-info">
+          <h4><i class="fas fa-info-circle"></i> গুরুত্বপূর্ণ তথ্য</h4>
+          <ul>
+            <li>টেলিগ্রাম চ্যানেল শুধুমাত্র আপডেটের জন্য</li>
+            <li>কোনো মেসেজ পাঠানোর প্রয়োজন নেই</li>
+            <li>নিয়মিত চেক করুন নতুন আপডেটের জন্য</li>
+          </ul>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-secondary" onclick="goBackToWhatsApp()">
+            <i class="fas fa-arrow-left"></i> WhatsApp এ ফিরে যান
+          </button>
+          <button class="btn" onclick="goToHomePage()">
+            <i class="fas fa-home"></i> হোমপেজে ফিরে যান
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Edit Modal -->
-  <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div id="editModal" class="modal">
     <div class="modal-content">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3>Edit User</h3><button class="close-btn" onclick="closeModal()">&times;</button></div>
-      <div class="form-group"><label for="editName">Name</label><input id="editName" type="text"></div>
-      <div class="form-group"><label for="editPhone">Phone</label><input id="editPhone" type="text"></div>
-      <div class="form-group"><label for="editGmail">Email</label><input id="editGmail" type="text"></div>
-      <div class="form-group"><label for="editArea">Area</label><input id="editArea" type="text"></div>
-      <div class="form-group"><label for="editWord">Word</label><input id="editWord" type="text"></div>
-      <div class="form-group"><label for="editPhoto">Photo URL</label><input id="editPhoto" type="text"></div>
-      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn secondary btn-inline" onclick="closeModal()">Cancel</button><button class="btn btn-inline" onclick="saveEdit()">Save</button></div>
+      <div class="modal-header">
+        <h3>Edit User</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="form-group-modal">
+        <label for="editName">Name</label>
+        <input type="text" id="editName" placeholder="Name">
+      </div>
+      <div class="form-group-modal">
+        <label for="editPhone">Phone</label>
+        <input type="text" id="editPhone" placeholder="Phone">
+      </div>
+      <div class="form-group-modal">
+        <label for="editGmail">Email</label>
+        <input type="text" id="editGmail" placeholder="Email">
+      </div>
+      <div class="form-group-modal">
+        <label for="editArea">Area</label>
+        <input type="text" id="editArea" placeholder="Area">
+      </div>
+      <div class="form-group-modal">
+        <label for="editWord">Word Number</label>
+        <input type="text" id="editWord" placeholder="Word Number">
+      </div>
+      <div class="form-group-modal">
+        <label for="editPhoto">Photo URL</label>
+        <input type="text" id="editPhoto" placeholder="Photo URL">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+      </div>
     </div>
   </div>
 
   <!-- Login Modal -->
-  <div id="loginModal" class="modal" aria-hidden="true">
-    <div class="modal-content">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3>Admin Login</h3><button class="close-btn" onclick="closeLoginModal()">&times;</button></div>
-      <div class="form-group"><label for="username">Username</label><input id="username" type="text"></div>
-      <div class="form-group"><label for="password">Password</label><input id="password" type="password"></div>
-      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn secondary btn-inline" onclick="closeLoginModal()">Cancel</button><button class="btn btn-inline" onclick="login()">Login</button></div>
+  <div id="loginModal" class="login-modal">
+    <div class="login-content">
+      <div class="modal-header">
+        <h3>Admin Login</h3>
+        <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+      </div>
+      <div class="form-group-modal">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username">
+      </div>
+      <div class="form-group-modal">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeLoginModal()">Cancel</button>
+        <button class="btn-save" onclick="login()">Login</button>
+      </div>
     </div>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"><i id="toast-icon"></i><span id="toast-message"></span></div>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <i id="toast-icon"></i>
+    <span id="toast-message"></span>
+  </div>
 
   <script>
-    // ---------- IMPORTANT: Move sensitive tokens to server in production ----------
-    const ADMIN_CREDENTIALS = {username: 'jurain', password: 'jurain123'}; // change if needed
-
-    // Put your bot token & chat IDs here (for dev/testing). Production: proxy these on server.
-    const TELEGRAM_CONFIG = {
-      BOT_TOKEN: '7757315317:AAHhlhX7UwuOnqSGE7C3PihIJCN-d_Gpbc4', // <-- paste your BOT token here for quick test (NOT recommended for production)
-      REGISTRATION_CHAT_ID: '-1002376799447', // <-- registration messages go here
-      ADMIN_CHAT_ID: '-1002376799447' // <-- admin notifications (optional)
+    // Default admin credentials
+    const ADMIN_CREDENTIALS = {
+      username: "admin",
+      password: "admin123"
     };
 
-    const nowYear = new Date().getFullYear(); document.getElementById('year').textContent = nowYear;
+    // Telegram Configuration
+    const TELEGRAM_CONFIG = {
+      BOT_TOKEN: "7757315317:AAHhlhX7UwuOnqSGE7C3PihIJCN-d_Gpbc4",
+      REGISTRATION_CHAT_ID: "-4940703054",
+      ADMIN_CHAT_ID: "-4970599148"
+    };
 
-    // App state
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    let editUserId = null; let currentFilter = 'all'; let searchQuery = '';
-    let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let editIndex = null;
+    let currentFilter = "all";
+    let searchQuery = "";
+    let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    let userIP = "লোড হচ্ছে...";
 
-    function init(){
-      updateDateTime(); setInterval(updateDateTime,1000);
-      fetchIPAddress(); setupEventListeners(); renderBasedOnLogin(); updateStats();
-      document.getElementById('photo').addEventListener('change',handlePhotoChange);
-    }
-
-    function updateDateTime(){
-      const now = new Date();
-      document.getElementById('dateTime').innerHTML = `<i class="fas fa-calendar-alt"></i> ${now.toLocaleDateString()} <i class="fas fa-clock"></i> ${now.toLocaleTimeString()}`;
-      document.querySelector('#date span').textContent = now.toLocaleDateString('bn-BD');
-      document.querySelector('#time span').textContent = now.toLocaleTimeString('bn-BD');
-    }
-
-    function fetchIPAddress(){
-      fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>{
-        document.getElementById('ipAddress').innerHTML = `<i class="fas fa-globe"></i> IP: ${d.ip}`;
-        document.querySelector('#ip span').textContent = d.ip;
-      }).catch(()=>{document.getElementById('ipAddress').textContent='IP: Unable to fetch';document.querySelector('#ip span').textContent='IP অজানা'})
-    }
-
-    function setupEventListeners(){
-      document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');currentFilter=this.dataset.filter;renderTable();}));
-      const s = document.getElementById('searchInput'); if(s){s.addEventListener('input',e=>{searchQuery=e.target.value.trim().toLowerCase();renderTable();})}
-    }
-
-    function openLoginModal(){document.getElementById('loginModal').style.display='flex';document.getElementById('loginModal').setAttribute('aria-hidden','false')}
-    function closeLoginModal(){document.getElementById('loginModal').style.display='none';document.getElementById('loginModal').setAttribute('aria-hidden','true');document.getElementById('username').value='';document.getElementById('password').value=''}
-    function login(){const u=document.getElementById('username').value.trim();const p=document.getElementById('password').value; if(u===ADMIN_CREDENTIALS.username && p===ADMIN_CREDENTIALS.password){isLoggedIn=true;localStorage.setItem('isLoggedIn','true');renderBasedOnLogin();closeLoginModal();showToast('Login successful','success')}else{showToast('Invalid username or password','error')}}
-    function logout(){isLoggedIn=false;localStorage.setItem('isLoggedIn','false');renderBasedOnLogin();showToast('Logged out','success')}
-
-    function renderBasedOnLogin(){if(isLoggedIn){document.getElementById('registrationForm').style.display='none';document.getElementById('adminPanel').style.display='block';document.getElementById('loginButton').style.display='none';document.getElementById('logoutButton').style.display='inline-flex';renderTable();updateStats()}else{document.getElementById('registrationForm').style.display='block';document.getElementById('adminPanel').style.display='none';document.getElementById('loginButton').style.display='inline-flex';document.getElementById('logoutButton').style.display='none'}}
-
-    function findUserIndexById(id){return users.findIndex(u=>u.id===id)}
-
-    function renderTable(){
-      const tbody = document.querySelector('#userTable tbody'); if(!tbody) return; tbody.innerHTML='';
-      const filtered = users.filter(u=>{
-        const matchesFilter = currentFilter==='all' || (u.status && u.status.toLowerCase()===currentFilter);
-        const q = searchQuery;
-        if(!q) return matchesFilter;
-        return (u.name||'').toLowerCase().includes(q) || (u.phone||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q) || (u.area||'').toLowerCase().includes(q) || (u.word||'').toLowerCase().includes(q);
+    // Initialize the application
+    function init() {
+      console.log("Initializing application...");
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      
+      fetchIPAddress();
+      updateStats();
+      setupEventListeners();
+      
+      // Check if user is already logged in
+      if (isLoggedIn) {
+        console.log("User is logged in, showing admin panel");
+        showAdminPanel();
+      } else {
+        console.log("User is not logged in, showing registration form");
+        hideAdminPanel();
+      }
+      
+      // Setup photo preview
+      document.getElementById("photo").addEventListener("change", function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById("photoPreview");
+        const error = document.getElementById("photoError");
+        
+        if (file) {
+          if (!file.type.startsWith('image/')) {
+            error.textContent = 'শুধুমাত্র ইমেজ ফাইল অনুমোদিত';
+            error.style.display = 'block';
+            this.value = '';
+            preview.style.display = 'none';
+            return;
+          }
+          
+          if (file.size > 10 * 1024 * 1024) {
+            error.textContent = 'ফাইলের আকার 10MB এর কম হতে হবে';
+            error.style.display = 'block';
+            this.value = '';
+            preview.style.display = 'none';
+            return;
+          }
+          
+          error.style.display = 'none';
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.style.display = 'none';
+        }
       });
-      if(filtered.length===0){tbody.innerHTML='<tr><td colspan="10">No users found</td></tr>';return}
-      filtered.forEach(u=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `<td>${u.id}</td>
-                        <td>${escapeHtml(u.name)}</td>
-                        <td>${escapeHtml(u.phone)}</td>
-                        <td>${escapeHtml(u.email||'—')}</td>
-                        <td>${escapeHtml(u.area)}</td>
-                        <td>${escapeHtml(u.word)}</td>
-                        <td><img src="${u.photo||'https://via.placeholder.com/50'}" alt="photo" style="width:50px;height:50px;object-fit:cover;border-radius:4px"></td>
-                        <td class="status-${(u.status||'').toLowerCase()}">${escapeHtml(u.status||'pending')}</td>
-                        <td>${escapeHtml(u.date)}</td>
-                        <td class="action-buttons">
-                          <button class="action-btn" title="Approve" style="background:${'#2e7d32'}" onclick="updateStatusById(${u.id},'approved')"><i class="fas fa-check"></i></button>
-                          <button class="action-btn" title="Hold" style="background:${'#ff9800'}" onclick="updateStatusById(${u.id},'hold')"><i class="fas fa-pause"></i></button>
-                          <button class="action-btn" title="Reject" style="background:${'#d32f2f'}" onclick="updateStatusById(${u.id},'rejected')"><i class="fas fa-times"></i></button>
-                          <button class="action-btn" title="Edit" style="background:${'#1976d2'}" onclick="openEditModalById(${u.id})"><i class="fas fa-edit"></i></button>
-                          <button class="action-btn" title="Delete" style="background:${'#6c757d'}" onclick="deleteUserById(${u.id})"><i class="fas fa-trash"></i></button>
-                        </td>`;
+
+      // Setup t-shirt size selection
+      document.querySelectorAll('.tshirt-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.tshirt-option').forEach(opt => {
+            opt.classList.remove('selected');
+          });
+          this.classList.add('selected');
+          document.getElementById('tshirtSize').value = this.getAttribute('data-size');
+        });
+      });
+
+      // Test button functionality
+      console.log("Login button:", document.getElementById("loginButton"));
+      console.log("Next page button exists:", document.querySelector('.btn-full') !== null);
+    }
+
+    // Update date and time
+    function updateDateTime() {
+      const now = new Date();
+      
+      // Format date and time
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      
+      const formattedDate = now.toLocaleDateString('bn-BD', dateOptions);
+      const formattedTime = now.toLocaleTimeString('bn-BD', timeOptions);
+      const formattedDateTime = now.toLocaleDateString('bn-BD') + ' ' + now.toLocaleTimeString('bn-BD');
+      
+      // Update header
+      document.getElementById("dateTime").innerHTML = 
+        `<i class="fas fa-calendar-alt"></i> ${formattedDate} <i class="fas fa-clock"></i> ${formattedTime}`;
+      
+      // Update registration form date/time as well
+      document.querySelector('#date span').textContent = formattedDate;
+      document.querySelector('#time span').textContent = formattedTime;
+    }
+
+    // Fetch IP address (but don't display it)
+    function fetchIPAddress() {
+      fetch("https://api.ipify.org?format=json")
+        .then(res => res.json())
+        .then(data => {
+          userIP = data.ip;
+          // Don't display IP address on the page
+        })
+        .catch(() => {
+          userIP = "অজানা";
+        });
+    }
+
+    // Set up event listeners
+    function setupEventListeners() {
+      console.log("Setting up event listeners...");
+      
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("input", function(e) {
+          searchQuery = e.target.value.toLowerCase();
+          renderTable();
+        });
+      }
+
+      document.querySelectorAll(".filter-btn").forEach(button => {
+        button.addEventListener("click", function() {
+          document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+          this.classList.add("active");
+          currentFilter = this.dataset.filter;
+          renderTable();
+        });
+      });
+
+      // Test if buttons are properly set up
+      const loginBtn = document.getElementById("loginButton");
+      if (loginBtn) {
+        console.log("Login button found and event listener attached");
+      } else {
+        console.error("Login button not found!");
+      }
+    }
+
+    // Toggle reference fields based on selection
+    function toggleReferenceFields() {
+      const reference = document.getElementById("reference").value;
+      
+      // Hide all conditional fields first
+      document.querySelectorAll('#page2 .conditional-field').forEach(field => {
+        field.classList.remove('active');
+      });
+      
+      // Show the selected field only for bdclean and others
+      if (reference === 'bdclean') {
+        document.getElementById('bdcleanField').classList.add('active');
+      } else if (reference === 'others') {
+        document.getElementById('othersField').classList.add('active');
+      }
+      // For facebook and youtube, no additional fields needed
+    }
+
+    // Toggle identity fields based on selection
+    function toggleIdentityFields() {
+      const identity = document.getElementById("identity").value;
+      
+      // Hide identity number field first
+      document.getElementById('identityNumberField').classList.remove('active');
+      
+      // Show the field if an identity is selected
+      if (identity) {
+        document.getElementById('identityNumberField').classList.add('active');
+      }
+    }
+
+    // Open login modal - FIXED
+    function openLoginModal() {
+      console.log("Opening login modal...");
+      document.getElementById("loginModal").style.display = "flex";
+    }
+
+    // Close login modal
+    function closeLoginModal() {
+      document.getElementById("loginModal").style.display = "none";
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    // Login function - COMPLETELY FIXED
+    function login() {
+      console.log("Login function called");
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      
+      console.log("Username:", username, "Password:", password);
+      
+      if (!username || !password) {
+        showToast("দয়া করে ইউজারনেম এবং পাসওয়ার্ড দিন", "error");
+        return;
+      }
+      
+      if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+        isLoggedIn = true;
+        localStorage.setItem("isLoggedIn", "true");
+        console.log("Login successful, showing admin panel");
+        showAdminPanel();
+        closeLoginModal();
+        showToast("লগইন সফল হয়েছে", "success");
+      } else {
+        console.log("Login failed");
+        showToast("ভুল ইউজারনেম বা পাসওয়ার্ড", "error");
+      }
+    }
+
+    // Logout function
+    function logout() {
+      isLoggedIn = false;
+      localStorage.setItem("isLoggedIn", "false");
+      hideAdminPanel();
+      showToast("লগআউট সফল হয়েছে", "success");
+    }
+
+    // Show admin panel - FIXED
+    function showAdminPanel() {
+      console.log("Showing admin panel");
+      document.getElementById("registrationForm").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
+      document.getElementById("loginButton").style.display = "none";
+      document.getElementById("logoutButton").style.display = "flex";
+      renderTable();
+      updateStats();
+    }
+
+    // Hide admin panel - FIXED
+    function hideAdminPanel() {
+      console.log("Hiding admin panel");
+      document.getElementById("registrationForm").style.display = "block";
+      document.getElementById("adminPanel").style.display = "none";
+      document.getElementById("loginButton").style.display = "flex";
+      document.getElementById("logoutButton").style.display = "none";
+    }
+
+    // Show WhatsApp page after successful form submission
+    function showWhatsAppPage() {
+      document.getElementById("registrationForm").style.display = "none";
+      document.getElementById("whatsappPage").style.display = "block";
+      document.getElementById("adminPanel").style.display = "none";
+    }
+
+    // Copy WhatsApp link to clipboard
+    function copyWhatsAppLink() {
+      const linkInput = document.getElementById("whatsappLink");
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // For mobile devices
+      document.execCommand("copy");
+      showToast("WhatsApp লিঙ্ক কপি করা হয়েছে", "success");
+    }
+
+    // Navigate to Telegram page
+    function goToTelegram() {
+      document.getElementById("whatsappPage").style.display = "none";
+      document.getElementById("telegramPage").style.display = "block";
+    }
+
+    // Copy Telegram link to clipboard
+    function copyTelegramLink() {
+      const linkInput = document.getElementById("telegramLink");
+      linkInput.select();
+      linkInput.setSelectionRange(0, 99999); // For mobile devices
+      document.execCommand("copy");
+      showToast("টেলিগ্রাম লিঙ্ক কপি করা হয়েছে", "success");
+    }
+
+    // Go back to WhatsApp page
+    function goBackToWhatsApp() {
+      document.getElementById("telegramPage").style.display = "none";
+      document.getElementById("whatsappPage").style.display = "block";
+    }
+
+    // Go back to registration form
+    function goBackToForm() {
+      document.getElementById("whatsappPage").style.display = "none";
+      document.getElementById("registrationForm").style.display = "block";
+    }
+
+    // Go to home page
+    function goToHomePage() {
+      document.getElementById("telegramPage").style.display = "none";
+      document.getElementById("registrationForm").style.display = "block";
+      
+      // Reset form progress
+      document.querySelectorAll('.form-page').forEach(page => page.classList.remove('active'));
+      document.getElementById('page1').classList.add('active');
+      document.getElementById("formProgress").style.width = "0%";
+    }
+
+    // Render the user table
+    function renderTable() {
+      const tbody = document.querySelector("#userTable tbody");
+      if (!tbody) return;
+      
+      tbody.innerHTML = "";
+      
+      const filteredUsers = users.filter(user => {
+        const matchesFilter = currentFilter === "all" || user.status.toLowerCase() === currentFilter;
+        const matchesSearch = 
+          user.name.toLowerCase().includes(searchQuery) ||
+          user.phone.toLowerCase().includes(searchQuery) ||
+          user.email.toLowerCase().includes(searchQuery) ||
+          user.area.toLowerCase().includes(searchQuery) ||
+          user.word.toLowerCase().includes(searchQuery);
+        
+        return matchesFilter && matchesSearch;
+      });
+
+      if (filteredUsers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="20" style="text-align: center;">কোন ইউজার পাওয়া যায়নি</td></tr>`;
+        return;
+      }
+
+      filteredUsers.forEach((user, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${user.id}</td>
+          <td>${user.name}</td>
+          <td>${user.phone}</td>
+          <td>${user.email}</td>
+          <td>${user.dob}</td>
+          <td>${user.area}</td>
+          <td>${user.word}</td>
+          <td>${user.permanentAddress || '-'}</td>
+          <td><a href="${user.facebook}" target="_blank">ফেসবুক লিঙ্ক</a></td>
+          <td>${user.reference}</td>
+          <td>${user.nationality}</td>
+          <td>${user.identity}</td>
+          <td>${user.bloodGroup}</td>
+          <td>${user.gender}</td>
+          <td>${user.religion}</td>
+          <td>${user.tshirtSize}</td>
+          <td><img src="${user.photo || 'https://via.placeholder.com/50'}" alt="User Photo" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
+          <td class="status-${user.status.toLowerCase()}">${user.status}</td>
+          <td>${user.date}</td>
+          <td class="action-buttons">
+            <button class="action-btn approve" onclick="updateStatus(${index}, 'approved')"><i class="fas fa-check"></i></button>
+            <button class="action-btn hold" onclick="updateStatus(${index}, 'hold')"><i class="fas fa-pause"></i></button>
+            <button class="action-btn reject" onclick="updateStatus(${index}, 'rejected')"><i class="fas fa-times"></i></button>
+            <button class="action-btn edit" onclick="openEditModal(${index})"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete" onclick="deleteUser(${index})"><i class="fas fa-trash"></i></button>
+          </td>
+        `;
         tbody.appendChild(tr);
       });
     }
 
-    function updateStatusById(id,status){
-      const idx=findUserIndexById(id);
-      if(idx===-1){showToast('User not found','error');return}
-      const user=users[idx]; const prev=user.status||'pending';
-      user.status=status; localStorage.setItem('users',JSON.stringify(users)); renderTable(); updateStats();
-      const message = `*BD Clean Jurain - Status Update*\nName: ${user.name}\nPhone: ${user.phone}\nStatus: ${prev} -> ${status}`;
-      sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
-      showToast('User status updated','success');
+    // Form navigation - COMPLETELY FIXED
+    function nextPage(current, next) {
+      console.log(`Navigating from page ${current} to page ${next}`);
+      
+      // Validate current page before proceeding
+      let isValid = true;
+      
+      if (current === 1) {
+        isValid = validatePage1();
+      } else if (current === 2) {
+        isValid = validatePage2();
+      } else if (current === 3) {
+        isValid = validatePage3();
+      }
+      
+      if (!isValid) {
+        const errorMessage = current === 1 ? 
+          "দয়া করে প্রথম পৃষ্ঠার সকল তথ্য সঠিকভাবে পূরণ করুন" : 
+          (current === 2 ? "দয়া করে দ্বিতীয় পৃষ্ঠার সকল তথ্য সঠিকভাবে পূরণ করুন" : 
+          "দয়া করে তৃতীয় পৃষ্ঠার সকল তথ্য সঠিকভাবে পূরণ করুন");
+        showToast(errorMessage, "error");
+        return false;
+      }
+      
+      // Hide current page
+      const currentPage = document.getElementById(`page${current}`);
+      const nextPage = document.getElementById(`page${next}`);
+      
+      if (!currentPage || !nextPage) {
+        console.error("Page elements not found!");
+        return false;
+      }
+      
+      currentPage.classList.remove("active");
+      nextPage.classList.add("active");
+      
+      // Update progress bar
+      const progress = document.getElementById("formProgress");
+      if (progress) {
+        progress.style.width = `${(next-1) * 25}%`;
+      }
+      
+      console.log(`Successfully navigated to page ${next}`);
+      return true;
     }
 
-    function openEditModalById(id){
-      const idx=findUserIndexById(id); if(idx===-1) return;
-      const u=users[idx];
-      document.getElementById('editName').value=u.name;document.getElementById('editPhone').value=u.phone;document.getElementById('editGmail').value=u.email;document.getElementById('editArea').value=u.area;document.getElementById('editWord').value=u.word;document.getElementById('editPhoto').value=u.photo||'';
-      editUserId=id; document.getElementById('editModal').style.display='flex'; document.getElementById('editModal').setAttribute('aria-hidden','false');
-    }
-    function closeModal(){document.getElementById('editModal').style.display='none';document.getElementById('editModal').setAttribute('aria-hidden','true'); editUserId=null}
-
-    function saveEdit(){
-      if(editUserId===null) return; const idx=findUserIndexById(editUserId); if(idx===-1) return;
-      const original = {...users[idx]};
-      users[idx].name=document.getElementById('editName').value.trim();
-      users[idx].phone=document.getElementById('editPhone').value.trim();
-      users[idx].email=document.getElementById('editGmail').value.trim();
-      users[idx].area=document.getElementById('editArea').value.trim();
-      users[idx].word=document.getElementById('editWord').value.trim();
-      users[idx].photo=document.getElementById('editPhoto').value.trim();
-      users[idx].status='edited';
-      localStorage.setItem('users',JSON.stringify(users)); renderTable(); updateStats(); closeModal();
-      const message = `*BD Clean Jurain - Edited*\nName: ${original.name} -> ${users[idx].name}`;
-      sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
-      showToast('User updated','success');
+    // Previous page function
+    function prevPage(current) {
+      console.log(`Navigating back from page ${current}`);
+      const previous = current - 1;
+      
+      // Hide current page
+      document.getElementById(`page${current}`).classList.remove("active");
+      
+      // Show previous page
+      document.getElementById(`page${previous}`).classList.add("active");
+      
+      // Update progress bar
+      const progress = document.getElementById("formProgress");
+      if (progress) {
+        progress.style.width = `${(previous-1) * 25}%`;
+      }
     }
 
-    function deleteUserById(id){
-      if(!confirm('Are you sure to delete?')) return;
-      const idx=findUserIndexById(id); if(idx===-1) return;
-      const removed = users.splice(idx,1)[0]; localStorage.setItem('users',JSON.stringify(users)); renderTable(); updateStats();
-      const message = `*BD Clean Jurain - Deleted*\nName: ${removed.name}`;
-      sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
-      showToast('Deleted','success');
-    }
-
-    function updateStats(){
-      document.getElementById('totalUsers').textContent = users.length;
-      document.getElementById('pendingUsers').textContent = users.filter(u=> (u.status||'').toLowerCase()==='pending').length;
-      document.getElementById('approvedUsers').textContent = users.filter(u=> (u.status||'').toLowerCase()==='approved').length;
-      document.getElementById('rejectedUsers').textContent = users.filter(u=> (u.status||'').toLowerCase()==='rejected').length;
-    }
-
-    // Toast helper
-    function showToast(msg,type='success'){
-      const t = document.getElementById('toast'); const icon = document.getElementById('toast-icon'); const text = document.getElementById('toast-message');
-      if(type==='success') icon.className='fas fa-check-circle'; else if(type==='error') icon.className='fas fa-exclamation-circle'; else icon.className='fas fa-exclamation-triangle';
-      text.textContent = msg; t.className = `toast ${type} show`;
-      setTimeout(()=>{t.className='toast'},3000);
-    }
-
-    // Navigation pages & validation
-    function nextPage(current,next){
-      if(current===1 && !validatePage1()) return;
-      if(current===2 && !validatePage2()) return;
-      document.getElementById('page'+current).classList.remove('active');
-      document.getElementById('page'+next).classList.add('active');
-      const widths = {1:0,2:50,3:100}; document.getElementById('formProgress').style.width = widths[next] + '%';
-    }
-
-    function validatePage1(){
-      let ok=true;
-      const name=document.getElementById('name'), phone=document.getElementById('phone'), email=document.getElementById('email');
-      if(!name.value.trim()){document.getElementById('group-name').classList.add('invalid'); ok=false} else document.getElementById('group-name').classList.remove('invalid');
+    // Validate page 1
+    function validatePage1() {
+      let isValid = true;
+      
+      // Reset all error states first
+      document.querySelectorAll('#page1 .form-group').forEach(group => {
+        group.classList.remove('invalid');
+      });
+      
+      const name = document.getElementById('name');
+      const nameValue = name.value.trim();
+      if (!nameValue) {
+        name.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const phone = document.getElementById('phone');
+      const phoneValue = phone.value.trim();
       const phoneRegex = /^01[3-9]\d{8}$/;
-      if(!phoneRegex.test(phone.value.trim())){document.getElementById('group-phone').classList.add('invalid'); ok=false} else document.getElementById('group-phone').classList.remove('invalid');
-      if(email.value && !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value))){document.getElementById('group-email').classList.add('invalid'); ok=false} else document.getElementById('group-email').classList.remove('invalid');
-      return ok;
+      if (!phoneRegex.test(phoneValue)) {
+        phone.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const email = document.getElementById('email');
+      const emailValue = email.value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailValue)) {
+        email.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const dob = document.getElementById('dob');
+      const dobValue = dob.value.trim();
+      if (!dobValue) {
+        dob.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      return isValid;
     }
-
-    function validatePage2(){
-      let ok=true;
-      const area=document.getElementById('area'), word=document.getElementById('word');
-      if(!area.value.trim()){document.getElementById('group-area').classList.add('invalid'); ok=false} else document.getElementById('group-area').classList.remove('invalid');
-      if(!word.value.trim()){document.getElementById('group-word').classList.add('invalid'); ok=false} else document.getElementById('group-word').classList.remove('invalid');
-      return ok;
-    }
-
-    // IMPORTANT: Facebook must be provided and valid
-    function validateForm(){
-      if(!validatePage1()||!validatePage2()){showToast('Please fill required fields','error'); return}
+    
+    // Validate page 2
+    function validatePage2() {
+      let isValid = true;
+      
+      // Reset all error states first
+      document.querySelectorAll('#page2 .form-group').forEach(group => {
+        group.classList.remove('invalid');
+      });
+      
+      const area = document.getElementById('area');
+      const areaValue = area.value.trim();
+      if (!areaValue) {
+        area.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const word = document.getElementById('word');
+      const wordValue = word.value.trim();
+      if (!wordValue) {
+        word.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const permanentAddress = document.getElementById('permanentAddress');
+      const permanentAddressValue = permanentAddress.value.trim();
+      if (!permanentAddressValue) {
+        permanentAddress.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
       const facebook = document.getElementById('facebook');
-      if(!facebook.value.trim()){document.getElementById('group-facebook').classList.add('invalid'); showToast('Facebook লিঙ্ক দিতে হবে','error'); return}
-      try{
-        new URL(facebook.value.trim());
-        document.getElementById('group-facebook').classList.remove('invalid');
-      }catch(e){
-        document.getElementById('group-facebook').classList.add('invalid');
-        showToast('সঠিক Facebook লিঙ্ক দিন','error'); return;
-      }
-      submitForm();
-    }
-
-    // Submit: read photo (if any) -> save user -> push to telegram
-    function submitForm(){
-      const name=document.getElementById('name').value.trim();
-      const phone=document.getElementById('phone').value.trim();
-      const email=document.getElementById('email').value.trim();
-      const area=document.getElementById('area').value.trim();
-      const word=document.getElementById('word').value.trim();
-      const facebook=document.getElementById('facebook').value.trim();
-      const photoInput=document.getElementById('photo');
-
-      const newUser = { id: Date.now(), name, phone, email, area, word, facebook, photo: '', status: 'pending', date: new Date().toLocaleString('bn-BD') };
-
-      if(photoInput.files && photoInput.files[0]){
-        const file = photoInput.files[0];
-        if(!file.type.startsWith('image/')){showToast('Only image allowed','error'); return}
-        if(file.size > 5*1024*1024){showToast('Image must be < 5MB','error'); return}
-        const reader = new FileReader();
-        reader.onload = function(e){
-          newUser.photo = e.target.result; pushUser(newUser);
-        }
-        reader.readAsDataURL(file);
+      const facebookValue = facebook.value.trim();
+      if (!facebookValue) {
+        facebook.parentElement.classList.add('invalid');
+        isValid = false;
       } else {
-        newUser.photo = null; pushUser(newUser);
+        try {
+          new URL(facebookValue);
+        } catch (e) {
+          facebook.parentElement.classList.add('invalid');
+          isValid = false;
+        }
       }
+      
+      const reference = document.getElementById('reference');
+      const referenceValue = reference.value.trim();
+      if (!referenceValue) {
+        reference.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      // Additional validation for conditional fields
+      if (referenceValue === 'bdclean') {
+        const refMemberName = document.getElementById('refMemberName');
+        const refMemberNameValue = refMemberName.value.trim();
+        if (!refMemberNameValue) {
+          refMemberName.parentElement.classList.add('invalid');
+          isValid = false;
+        }
+        
+        const refMemberContact = document.getElementById('refMemberContact');
+        const refMemberContactValue = refMemberContact.value.trim();
+        const phoneRegex = /^01[3-9]\d{8}$/;
+        if (!phoneRegex.test(refMemberContactValue)) {
+          refMemberContact.parentElement.classList.add('invalid');
+          isValid = false;
+        }
+      } else if (referenceValue === 'others') {
+        const otherReference = document.getElementById('otherReference');
+        const otherReferenceValue = otherReference.value.trim();
+        if (!otherReferenceValue) {
+          otherReference.parentElement.classList.add('invalid');
+          isValid = false;
+        }
+      }
+      
+      return isValid;
     }
 
-    function pushUser(newUser){
-      users.push(newUser); localStorage.setItem('users',JSON.stringify(users));
-      if(isLoggedIn){ updateStats(); renderTable(); }
-      sendRegistrationToTelegram(newUser);
-      showSuccessAndReset();
+    // Validate page 3
+    function validatePage3() {
+      let isValid = true;
+      
+      // Reset all error states first
+      document.querySelectorAll('#page3 .form-group').forEach(group => {
+        group.classList.remove('invalid');
+      });
+      
+      const nationality = document.getElementById('nationality');
+      const nationalityValue = nationality.value.trim();
+      if (!nationalityValue) {
+        nationality.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const identity = document.getElementById('identity');
+      const identityValue = identity.value.trim();
+      if (!identityValue) {
+        identity.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const identityNumber = document.getElementById('identityNumber');
+      const identityNumberValue = identityNumber.value.trim();
+      if (identityValue && !identityNumberValue) {
+        identityNumber.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      const bloodGroup = document.getElementById('bloodGroup');
+      const bloodGroupValue = bloodGroup.value.trim();
+      if (!bloodGroupValue) {
+        bloodGroup.parentElement.classList.add('invalid');
+        isValid = false;
+      }
+      
+      return isValid;
     }
 
-    function showSuccessAndReset(){
-      document.getElementById('successMessage').style.display='block';
-      setTimeout(()=>{document.getElementById('successMessage').style.display='none'},3500);
-      document.getElementById('userForm').reset();
-      document.getElementById('photoPreview').style.display='none';
-      document.querySelectorAll('.form-page').forEach(p=>p.classList.remove('active'));
-      document.getElementById('page1').classList.add('active');
-      document.getElementById('formProgress').style.width='0%';
-      updateStats();
+    // Validate form
+    function validateForm() {
+      // Validate required pages
+      if (!validatePage1() || !validatePage2() || !validatePage3()) {
+        showToast("দয়া করে সকল প্রয়োজনীয় তথ্য সঠিকভাবে পূরণ করুন", "error");
+        return;
+      }
+      
+      // Validate photo
+      const photo = document.getElementById('photo');
+      if (!photo.files || !photo.files[0]) {
+        document.getElementById('photoError').style.display = 'block';
+        showToast("দয়া করে একটি ফটো আপলোড করুন", "error");
+        return;
+      }
+      
+      // Validate page 4 fields
+      const gender = document.getElementById('gender');
+      const genderValue = gender.value.trim();
+      if (!genderValue) {
+        gender.parentElement.classList.add('invalid');
+        showToast("দয়া করে লিঙ্গ নির্বাচন করুন", "error");
+        return;
+      }
+      
+      const religion = document.getElementById('religion');
+      const religionValue = religion.value.trim();
+      if (!religionValue) {
+        religion.parentElement.classList.add('invalid');
+        showToast("দয়া করে ধর্ম নির্বাচন করুন", "error");
+        return;
+      }
+      
+      const tshirtSize = document.getElementById('tshirtSize');
+      const tshirtSizeValue = tshirtSize.value.trim();
+      if (!tshirtSizeValue) {
+        document.querySelector('.tshirt-options').parentElement.classList.add('invalid');
+        showToast("দয়া করে টি-শার্ট সাইজ নির্বাচন করুন", "error");
+        return;
+      }
+      
+      // If all validations pass, submit the form
+      processFormSubmission();
     }
 
-    // Preview & photo validations
-    function handlePhotoChange(e){
-      const file = e.target.files[0]; const preview = document.getElementById('photoPreview'); const err = document.getElementById('photoError');
-      if(!file){ preview.style.display='none'; return }
-      if(!file.type.startsWith('image/')){ err.textContent='শুধুমাত্র ইমেজ ফাইল অনুমোদিত'; err.style.display='block'; e.target.value=''; preview.style.display='none'; return }
-      if(file.size > 5*1024*1024){ err.textContent='ফাইলের আকার 5MB এর কম হতে হবে'; err.style.display='block'; e.target.value=''; preview.style.display='none'; return }
-      err.style.display='none'; const reader = new FileReader();
-      reader.onload = function(ev){ preview.src = ev.target.result; preview.style.display='block' }; reader.readAsDataURL(file);
-    }
-
-    // Telegram integration (text + photo). NOTE: For production use server proxy.
-    function sendRegistrationToTelegram(user){
-      const message = `*BD Clean Jurain - New Registration*\n👤 Name: ${user.name}\n📞 Phone: ${user.phone}\n📍 Area: ${user.area}\n🏘 Word: ${user.word}\n🔗 Facebook: ${user.facebook}\n📅 Date: ${user.date}`;
-      // first send text for quick notification (optional)
-      if(TELEGRAM_CONFIG.BOT_TOKEN && TELEGRAM_CONFIG.REGISTRATION_CHAT_ID){
-        sendToTelegram(message, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID);
+    // Separate function to process form submission and show WhatsApp page
+    function processFormSubmission() {
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const dob = document.getElementById("dob").value;
+      const area = document.getElementById("area").value;
+      const word = document.getElementById("word").value;
+      const permanentAddress = document.getElementById("permanentAddress").value;
+      const facebook = document.getElementById("facebook").value;
+      const reference = document.getElementById("reference").value;
+      const refMemberName = document.getElementById("refMemberName").value;
+      const refMemberContact = document.getElementById("refMemberContact").value;
+      const otherReference = document.getElementById("otherReference").value;
+      const nationality = document.getElementById("nationality").value;
+      const identity = document.getElementById("identity").value;
+      const identityNumber = document.getElementById("identityNumber").value;
+      const bloodGroup = document.getElementById("bloodGroup").value;
+      const gender = document.getElementById("gender").value;
+      const religion = document.getElementById("religion").value;
+      const tshirtSize = document.getElementById("tshirtSize").value;
+      const photoInput = document.getElementById("photo");
+      
+      // Create a new user object
+      const newUser = {
+        id: Date.now(),
+        name,
+        phone,
+        email,
+        dob,
+        area,
+        word,
+        permanentAddress,
+        facebook,
+        reference,
+        refMemberName,
+        refMemberContact,
+        otherReference,
+        nationality,
+        identity,
+        identityNumber,
+        bloodGroup,
+        gender,
+        religion,
+        tshirtSize,
+        photo: "",
+        status: "pending",
+        date: new Date().toLocaleDateString('bn-BD'),
+        ip: userIP
+      };
+      
+      // Process photo
+      const photoFile = photoInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function(event) {
+        newUser.photo = event.target.result;
+        
+        // Add to users array
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        
+        // Send to Telegram with photo - FIXED
+        sendRegistrationToTelegram(newUser);
+        
+        // Show WhatsApp page instead of success message
+        showWhatsAppPage();
+        
+        // Reset form
+        document.getElementById("userForm").reset();
+        document.getElementById("photoPreview").style.display = 'none';
+        
+        // Reset conditional fields
+        document.querySelectorAll('.conditional-field').forEach(field => {
+          field.classList.remove('active');
+        });
+        
+        // Reset t-shirt selection
+        document.querySelectorAll('.tshirt-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        // Update stats if admin is logged in
+        if (isLoggedIn) {
+          updateStats();
+          renderTable();
+        }
+      };
+      
+      if (photoFile) {
+        reader.readAsDataURL(photoFile);
       } else {
-        console.log('Telegram not configured: message ->', message);
-      }
-      // if photo present send as photo with caption
-      if(user.photo){
-        if(TELEGRAM_CONFIG.BOT_TOKEN && TELEGRAM_CONFIG.REGISTRATION_CHAT_ID){
-          sendPhotoToTelegram(user.photo, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID, message);
-        } else {
-          console.log('Telegram not configured: photo available (not sent).');
+        // If no photo, still process the form
+        newUser.photo = "";
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        sendRegistrationToTelegram(newUser);
+        showWhatsAppPage();
+        
+        // Reset form
+        document.getElementById("userForm").reset();
+        document.getElementById("photoPreview").style.display = 'none';
+        
+        // Reset conditional fields
+        document.querySelectorAll('.conditional-field').forEach(field => {
+          field.classList.remove('active');
+        });
+        
+        // Reset t-shirt selection
+        document.querySelectorAll('.tshirt-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        // Update stats if admin is logged in
+        if (isLoggedIn) {
+          updateStats();
+          renderTable();
         }
       }
     }
 
-    function sendToTelegram(message, chatId){
-      if(!TELEGRAM_CONFIG.BOT_TOKEN || !chatId){ console.log('Telegram not configured'); return; }
-      fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'Markdown' })
-      }).then(r=>r.json()).then(d=>console.log('telegram sendMessage',d)).catch(e=>console.error(e));
-    }
-
-    // Convert base64 image to Blob and send using sendPhoto
-    function sendPhotoToTelegram(photoBase64, chatId, caption){
-      if(!TELEGRAM_CONFIG.BOT_TOKEN || !chatId){ console.log('Telegram not configured'); return; }
-
-      function b64toBlob(b64Data, contentType='', sliceSize=512){
-        const byteCharacters = atob(b64Data.split(',')[1]);
-        const byteArrays = [];
-        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-          const slice = byteCharacters.slice(offset, offset + sliceSize);
-          const byteNumbers = new Array(slice.length);
-          for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          byteArrays.push(byteArray);
-        }
-        return new Blob(byteArrays, {type: contentType});
+    // Send registration data to Telegram with photo - FIXED
+    function sendRegistrationToTelegram(user) {
+      let referenceDetails = "";
+      
+      if (user.reference === "facebook") {
+        referenceDetails = `ফেসবুক`;
+      } else if (user.reference === "youtube") {
+        referenceDetails = `ইউটিউব`;
+      } else if (user.reference === "bdclean") {
+        referenceDetails = `বিডি ক্লিন মেম্বার: ${user.refMemberName || 'N/A'} (${user.refMemberContact || 'N/A'})`;
+      } else if (user.reference === "others") {
+        referenceDetails = `অন্যান্য: ${user.otherReference || 'N/A'}`;
       }
-
-      const contentType = detectImageMime(photoBase64) || 'image/jpeg';
-      const blob = b64toBlob(photoBase64, contentType);
-      const formData = new FormData();
-      formData.append('chat_id', chatId);
-      formData.append('photo', blob, 'photo.jpg');
-      if(caption) formData.append('caption', caption);
-      formData.append('parse_mode', 'Markdown');
-
-      fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendPhoto`, {
-        method: 'POST',
-        body: formData
-      }).then(r=>r.json()).then(d=>console.log('telegram sendPhoto',d)).catch(e=>console.error('sendPhoto error',e));
+      
+      const message = `
+🧹 *BD Clean Jurain - New Registration* 🧹
+        
+👤 *Name:* ${user.name}
+📞 *Phone:* ${user.phone}
+📧 *Email:* ${user.email}
+📅 *Date of Birth:* ${user.dob}
+        
+*বর্তমান ঠিকানা:*
+📍 এলাকা: ${user.area}
+🏠 ওয়ার্ড: ${user.word}
+        
+*স্থায়ী ঠিকানা:*
+${user.permanentAddress}
+        
+🔗 *Facebook:* ${user.facebook}
+*Reference:* ${referenceDetails}
+        
+🌍 *Nationality:* ${user.nationality}
+🆔 *Identity:* ${user.identity} (${user.identityNumber || 'N/A'})
+🩸 *Blood Group:* ${user.bloodGroup}
+⚧ *Gender:* ${user.gender}
+🙏 *Religion:* ${user.religion}
+👕 *T-Shirt Size:* ${user.tshirtSize}
+        
+🌐 *IP Address:* ${user.ip}
+📅 *Registration Date:* ${user.date}
+⏰ *Time:* ${new Date().toLocaleTimeString()}
+      `;
+      
+      // Send to registration group
+      sendToTelegram(message, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID);
+      
+      // Send photo to Telegram if available - FIXED
+      if (user.photo && user.photo !== "") {
+        setTimeout(() => {
+          sendPhotoToTelegram(user.photo, user.name, TELEGRAM_CONFIG.REGISTRATION_CHAT_ID);
+        }, 1000); // 1 second delay to ensure message sends first
+      }
     }
 
-    function detectImageMime(b64){
-      if(!b64) return null;
-      const head = b64.split(',')[0];
-      if(head.indexOf('image/png') !== -1) return 'image/png';
-      if(head.indexOf('image/jpeg') !== -1) return 'image/jpeg';
-      if(head.indexOf('image/webp') !== -1) return 'image/webp';
-      return null;
+    // Generic function to send messages to Telegram
+    function sendToTelegram(message, chatId) {
+      if (!TELEGRAM_CONFIG.BOT_TOKEN || !chatId) {
+        console.log("Telegram bot not configured properly");
+        return;
+      }
+      
+      const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendMessage`;
+      
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "Markdown"
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Message sent to Telegram:", data);
+      })
+      .catch(error => {
+        console.error("Error sending message to Telegram:", error);
+      });
     }
 
-    // helpers
-    function escapeHtml(str){ if(!str) return ''; return String(str).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+    // Function to send photo to Telegram - FIXED
+    function sendPhotoToTelegram(photoDataUrl, userName, chatId) {
+      if (!TELEGRAM_CONFIG.BOT_TOKEN || !chatId) {
+        console.log("Telegram bot not configured properly");
+        return;
+      }
+      
+      // Check if photoDataUrl is valid
+      if (!photoDataUrl || photoDataUrl === "") {
+        console.log("No photo to send");
+        return;
+      }
+      
+      try {
+        // Convert data URL to blob
+        fetch(photoDataUrl)
+          .then(res => {
+            if (!res.ok) throw new Error('Failed to fetch photo');
+            return res.blob();
+          })
+          .then(blob => {
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('photo', blob, `${userName}_photo.jpg`);
+            formData.append('caption', `📸 ${userName} এর ফটো`);
+            
+            const url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.BOT_TOKEN}/sendPhoto`;
+            
+            return fetch(url, {
+              method: "POST",
+              body: formData
+            });
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Failed to send photo');
+            return response.json();
+          })
+          .then(data => {
+            console.log("Photo sent to Telegram successfully:", data);
+          })
+          .catch(error => {
+            console.error("Error sending photo to Telegram:", error);
+            // Continue even if photo fails to send
+          });
+      } catch (error) {
+        console.error("Error in sendPhotoToTelegram:", error);
+      }
+    }
 
-    // Initialize table from localStorage
-    function initStorageRender(){
-      // ensure users array exists
-      users = JSON.parse(localStorage.getItem('users') || '[]');
+    // Update dashboard statistics
+    function updateStats() {
+      const total = users.length;
+      const pending = users.filter(user => user.status.toLowerCase() === "pending").length;
+      const approved = users.filter(user => user.status.toLowerCase() === "approved").length;
+      const rejected = users.filter(user => user.status.toLowerCase() === "rejected").length;
+      
+      document.getElementById("totalUsers").textContent = total;
+      document.getElementById("pendingUsers").textContent = pending;
+      document.getElementById("approvedUsers").textContent = approved;
+      document.getElementById("rejectedUsers").textContent = rejected;
+    }
+
+    // Show toast notification
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      const toastIcon = document.getElementById("toast-icon");
+      const toastMessage = document.getElementById("toast-message");
+      
+      if (type === "success") {
+        toastIcon.className = "fas fa-check-circle";
+      } else if (type === "error") {
+        toastIcon.className = "fas fa-exclamation-circle";
+      } else if (type === "warning") {
+        toastIcon.className = "fas fa-exclamation-triangle";
+      }
+      
+      toastMessage.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.className = "toast";
+      }, 3000);
+    }
+
+    // Other functions (updateStatus, openEditModal, closeModal, saveEdit, deleteUser)
+    function updateStatus(index, status) {
+      const user = users[index];
+      const previousStatus = user.status;
+      user.status = status;
+      localStorage.setItem("users", JSON.stringify(users));
+      renderTable();
       updateStats();
-      if(isLoggedIn) renderTable();
+      
+      const message = `🔔 *BD Clean Jurain - User Status Update*\n\n👤 *Name:* ${user.name}\n📞 *Phone:* ${user.phone}\n🔄 *Status Changed:* ${previousStatus} → ${status.toUpperCase()}`;
+      sendToTelegram(message, TELEGRAM_CONFIG.ADMIN_CHAT_ID);
+      showToast(`ইউজার স্ট্যাটাস ${status} এ আপডেট করা হয়েছে`, "success");
     }
 
-    // small helpers used earlier
-    function saveUserToLocal(u){ users.push(u); localStorage.setItem('users',JSON.stringify(users)); }
+    function openEditModal(index) {
+      const user = users[index];
+      document.getElementById("editName").value = user.name;
+      document.getElementById("editPhone").value = user.phone;
+      document.getElementById("editGmail").value = user.email;
+      document.getElementById("editArea").value = user.area;
+      document.getElementById("editWord").value = user.word;
+      document.getElementById("editPhoto").value = user.photo || "";
+      editIndex = index;
+      document.getElementById("editModal").style.display = "flex";
+    }
 
-    // Initialize on load
-    window.onload = function(){ init(); initStorageRender(); }
+    function closeModal() {
+      document.getElementById("editModal").style.display = "none";
+      editIndex = null;
+    }
 
+    function saveEdit() {
+      if (editIndex === null) return;
+      
+      const user = users[editIndex];
+      user.name = document.getElementById("editName").value;
+      user.phone = document.getElementById("editPhone").value;
+      user.email = document.getElementById("editGmail").value;
+      user.area = document.getElementById("editArea").value;
+      user.word = document.getElementById("editWord").value;
+      user.photo = document.getElementById("editPhoto").value;
+      user.status = "edited";
+      
+      localStorage.setItem("users", JSON.stringify(users));
+      renderTable();
+      updateStats();
+      closeModal();
+      showToast("ইউজার তথ্য আপডেট করা হয়েছে", "success");
+    }
+
+    function deleteUser(index) {
+      if (confirm("আপনি কি এই ইউজার ডিলিট করতে চান?")) {
+        users.splice(index, 1);
+        localStorage.setItem("users", JSON.stringify(users));
+        renderTable();
+        updateStats();
+        showToast("ইউজার সফলভাবে ডিলিট করা হয়েছে", "success");
+      }
+    }
+
+    // Initialize the application when the page loads
+    window.onload = init;
   </script>
 </body>
 </html>
